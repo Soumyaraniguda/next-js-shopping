@@ -49,6 +49,15 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_SECRET,
     }),
   ],
+  // This callback is called after successful login and before returning the session
+  callbacks: {
+    async session({ session, token }) {
+      let user = await User.findById(token.sub); // token has everything in it and sub is nothing but the Id stored in mongodb
+      session.user._id = token.sub || user._id.toString(); // Pass the token.sub or the userId
+      session.user.role = user.role || "user";
+      return session;
+    },
+  },
   pages: {
     signIn: "/sign-in",
   },
@@ -61,7 +70,6 @@ const handler = NextAuth({
 export { handler as GET, handler as POST };
 
 const signInUser = async ({ password, user }) => {
-  console.log({ user });
   if (!password) {
     throw new Error("Please enter your password");
   }

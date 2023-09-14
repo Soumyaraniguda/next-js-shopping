@@ -86,7 +86,14 @@ function SignIn() {
       });
       setUser({ ...user, error: "", success: response.data.message });
       setLoading(false);
-      setTimeout(() => {
+      setTimeout(async () => {
+        // Login after registering
+        let options = {
+          redirect: false, // Do not redirect by default
+          email: email,
+          password: password,
+        };
+        const res = await signIn("credentials", options);
         router.push("/");
       }, 100);
     } catch (error) {
@@ -108,7 +115,7 @@ function SignIn() {
     if (res?.error) {
       setUser({ ...user, loginError: res?.error });
     } else {
-      return Router.push("/");
+      return router.push("/");
     }
   };
 
