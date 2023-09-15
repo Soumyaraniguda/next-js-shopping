@@ -53,7 +53,7 @@ const handler = NextAuth({
   callbacks: {
     async session({ session, token }) {
       let user = await User.findById(token.sub); // token has everything in it and sub is nothing but the Id stored in mongodb
-      session.user._id = token.sub || user._id.toString(); // Pass the token.sub or the userId
+      session.user.id = token.sub || user._id.toString(); // Pass the token.sub or the userId
       session.user.role = user.role || "user";
       return session;
     },

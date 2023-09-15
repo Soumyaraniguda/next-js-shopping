@@ -16,6 +16,7 @@ import Image from "next/image";
 import axios from "axios";
 import DotLoaderSpinner from "@/components/loaders/DotLoader";
 import { useRouter } from "next/navigation";
+import InputWithCsrf from "@/components/InputWithCsrf";
 
 const initialValues = {
   loginEmail: "",
@@ -29,10 +30,13 @@ const initialValues = {
   loginError: "",
 };
 
-function SignIn() {
+function SignIn({ params, searchParams }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(initialValues);
+
+  // console.log({ router, params, searchParams });
+
   const {
     loginEmail,
     loginPassword,
@@ -44,6 +48,7 @@ function SignIn() {
     error,
     loginError,
   } = user;
+
   const [authProviders, setAuthProviders] = useState([]);
 
   const handleChange = (event) => {
@@ -115,13 +120,16 @@ function SignIn() {
     if (res?.error) {
       setUser({ ...user, loginError: res?.error });
     } else {
-      return router.push("/");
+      router.push(searchParams?.callbackUrl || "/");
     }
   };
 
   useEffect(() => {
     const auth = getOAuthSignInMethods().then((res) => {
-      setAuthProviders(res);
+      const filteredProviders = res.providers?.filter(
+        (provider) => provider.id !== "credentials"
+      );
+      setAuthProviders(filteredProviders);
     });
   }, []);
 
@@ -156,7 +164,8 @@ function SignIn() {
               onSubmit={() => handleLogin()}
             >
               {(form) => (
-                <Form>
+                <Form method="post" action="/api/auth/signup/email">
+                  <InputWithCsrf value={user.loginEmail} />
                   <LoginInput
                     type="text"
                     name="loginEmail"
@@ -164,7 +173,6 @@ function SignIn() {
                     placeholder="Email address"
                     onChange={handleChange}
                   />
-
                   <LoginInput
                     type="password"
                     name="loginPassword"
@@ -172,7 +180,6 @@ function SignIn() {
                     placeholder="Password"
                     onChange={handleChange}
                   />
-
                   <CurvedButtonWithIcon type="submit" text="Login" />
                   {loginError && (
                     <span className={styles.error}>{loginError}</span>
