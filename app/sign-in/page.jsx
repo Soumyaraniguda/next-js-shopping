@@ -1,7 +1,5 @@
 "use client";
 
-import Footer from "@/components/footer/page";
-import Header from "@/components/header/Header";
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/auth.module.scss";
 import { BiLeftArrowAlt } from "react-icons/bi";

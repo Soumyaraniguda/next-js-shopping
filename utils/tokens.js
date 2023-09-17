@@ -11,3 +11,8 @@ export const createResetPasswordToken = (payload) => {
     expiresIn: "6h", // expires in 6 hours
   });
 };
+
+export const verifyResetPasswordToken = (token) => {
+  const validToken = jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET);
+  return validToken;
+};

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../../../../styles/auth.module.scss";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { Formik, Form } from "formik";
@@ -10,10 +10,16 @@ import LoginInput from "@/components/inputs/loginInInput/page";
 import CurvedButtonWithIcon from "@/components/buttons/CurvedButtonWithIcon/page";
 import axios from "axios";
 import DotLoaderSpinner from "@/components/loaders/DotLoader";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 function ResetPassword({ params }) {
+  const router = useRouter();
+  const { data: session } = useSession();
+
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [userId, setUserId] = useState("");
 
   const [loading, setLoading] = useState("");
   const [error, setError] = useState("");
@@ -33,15 +39,49 @@ function ResetPassword({ params }) {
   const handleResetPassword = async () => {
     try {
       setLoading(true);
+      const { data } = await axios.put("/api/auth/reset-password", {
+        userId,
+        password,
+      });
+
+      // Login after resetting password
+      let options = {
+        redirect: false, // Do not redirect by default
+        email: data.email,
+        password: password,
+      };
+      await signIn("credentials", options);
 
       setError("");
       setLoading(false);
+
+      // Reload the window as we logged in using credentials we will have session
+      // and the useeffect will redirect user to home page
+      window.location.reload(true);
     } catch (error) {
       setError(error.response.data.message);
       setSuccess("");
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (session) {
+      // If user navigates to the reset password url after resetting and login we need to
+      // Redirect the page to home
+      router.push("/");
+    } else if (params.token) {
+      axios
+        .get(`/api/validate-token/${params.token}`)
+        .then((response) => {
+          setUserId(response.id);
+        })
+        .catch((error) => {
+          setUserId("");
+          console.log({ error });
+        });
+    }
+  }, [params.token, session]);
 
   return (
     <>
