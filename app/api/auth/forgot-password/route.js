@@ -7,7 +7,6 @@ import { createResetPasswordToken } from "@/utils/tokens";
 
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/utils/sendEmails";
-import activateEmailTemplate from "@/components/emails/activateEmailTemplate";
 import resetPasswordTemplate from "@/components/emails/resetPasswordEmailTemplate";
 
 export const POST = async (req, res) => {
