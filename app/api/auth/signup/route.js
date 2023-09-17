@@ -8,6 +8,7 @@ import { createActivationToken } from "@/utils/tokens";
 
 import { NextResponse } from "next/server";
 import { sendEmail } from "@/utils/sendEmails";
+import activateEmailTemplate from "@/components/emails/activateEmailTemplate";
 
 export const POST = async (req, res) => {
   try {
@@ -67,7 +68,8 @@ export const POST = async (req, res) => {
 
     // Create an activation link with token to send an email
     const url = `${process.env.BASE_URL}/activate/${activationToken}`;
-    sendEmail(email, url, "", "Activate your account");
+    sendEmail(email, url, "", "Activate your account", activateEmailTemplate);
+
     await db.disConnectDB();
     return NextResponse.json(
       {

@@ -40,7 +40,6 @@ export default function Home() {
 
   return (
     <div className={styles.red}>
-      <Header browserLocation={browserLocation} />
       {session ? (
         "You are logged in"
       ) : (
@@ -54,7 +53,6 @@ export default function Home() {
         Add Item
       </button>
       <button onClick={resetCart}>Reset </button> */}
-      <Footer browserLocation={browserLocation} />
     </div>
   );
 }

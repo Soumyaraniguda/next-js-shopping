@@ -136,7 +136,7 @@ function SignIn({ params, searchParams }) {
   return (
     <>
       {loading && <DotLoaderSpinner loading={loading} />}
-      <Header />
+
       <div className={styles.login}>
         <div className={styles.login__container}>
           <div className={styles.login__header}>
@@ -185,7 +185,7 @@ function SignIn({ params, searchParams }) {
                     <span className={styles.error}>{loginError}</span>
                   )}
                   <div className={styles.forgot__password}>
-                    <Link href="/forgot-password">Forgot password?</Link>
+                    <Link href="/auth/forgot-password">Forgot password?</Link>
                   </div>
                 </Form>
               )}
@@ -276,14 +276,13 @@ function SignIn({ params, searchParams }) {
                 </Form>
               )}
             </Formik>
-            <div>
+            <div style={{ marginTop: "10px" }}>
               {success && <span className={styles.success}>{success}</span>}
+              {error && <span className={styles.error}>{error}</span>}
             </div>
-            <div>{error && <span className={styles.error}>{error}</span>}</div>
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }
