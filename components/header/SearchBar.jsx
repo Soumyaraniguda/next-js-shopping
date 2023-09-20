@@ -6,7 +6,7 @@ import { RiSearch2Line } from "react-icons/ri";
 import { FaOpencart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-function Main() {
+function SearchBar() {
   const { cart } = useSelector((state) => ({ ...state }));
 
   return (
@@ -39,4 +39,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default SearchBar;

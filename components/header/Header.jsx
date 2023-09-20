@@ -1,5 +1,5 @@
 import Ad from "./Ad";
-import Main from "./Main";
+import SearchBar from "./SearchBar";
 import Top from "./Top";
 import styles from "./page.module.scss";
 
@@ -8,7 +8,7 @@ function Header({ browserLocation }) {
     <header className={styles.header}>
       <Ad />
       <Top browserLocation={browserLocation} />
-      <Main />
+      <SearchBar />
     </header>
   );
 }

@@ -8,6 +8,7 @@ import Footer from "@/components/footer/page";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession, signIn, signOut } from "next-auth/react";
+import Main from "@/components/home/main/Main";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -39,20 +40,12 @@ export default function Home() {
   }, []);
 
   return (
-    <div className={styles.red}>
-      {session ? (
-        "You are logged in"
-      ) : (
-        <>
-          <span>You are not logged in</span>
-          <button onClick={() => signIn()}>Sign In</button>
-        </>
-      )}
-      {/* Welcome
-      <button style={{ cursor: "pointer" }} onClick={addItemToCart}>
-        Add Item
-      </button>
-      <button onClick={resetCart}>Reset </button> */}
-    </div>
+    <>
+      <div className={styles.home}>
+        <div className={styles.container}>
+          <Main />
+        </div>
+      </div>
+    </>
   );
 }
