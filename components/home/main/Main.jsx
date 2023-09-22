@@ -1,3 +1,4 @@
+import Offers from "./Offers";
 import MainSwiper from "./Swiper";
 import styles from "./page.module.scss";
 
@@ -12,7 +13,7 @@ function Main() {
 
       <MainSwiper />
 
-      <div className={styles.offers}>offers</div>
+      <Offers />
       <div className={styles.user}>user</div>
     </div>
   );

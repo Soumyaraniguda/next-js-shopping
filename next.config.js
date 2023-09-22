@@ -11,6 +11,7 @@ const nextConfig = {
       "cdn.ipregistry.co",
       "lh3.googleusercontent.com",
       "cdn.pixabay.com",
+      "ae01.alicdn.com",
     ],
   },
 };
