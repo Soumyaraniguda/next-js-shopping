@@ -1,3 +1,4 @@
+import Menu from "./Menu";
 import Offers from "./Offers";
 import MainSwiper from "./Swiper";
 import styles from "./page.module.scss";
@@ -9,8 +10,7 @@ function Main() {
     <div className={styles.main}>
       <div className={styles.header}>header</div>
 
-      <div className={styles.menu}>Menu</div>
-
+      <Menu />
       <MainSwiper />
 
       <Offers />
