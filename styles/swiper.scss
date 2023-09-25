@@ -36,6 +36,7 @@
 }
 
 .mainSwiper,
+.user__swiper,
 .offers-swiper {
   max-width: 865px;
   min-width: 400px;
@@ -144,5 +145,22 @@
 
   .swiper-pagination {
     display: none;
+  }
+}
+
+.user__swiper {
+  min-width: 180px !important;
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    img {
+      height: 240px !important;
+      width: 180px !important;
+    }
   }
 }

@@ -28,9 +28,15 @@ export default function Offers() {
         className="offers-swiper"
       >
         {offersAarray.map((offer) => (
-          <SwiperSlide>
+          <SwiperSlide key={offer.image}>
             <Link href="">
-              <Image src={offer.image} width={0} height={200} sizes="100vw" />
+              <Image
+                src={offer.image}
+                width={0}
+                alt="Product image"
+                height={200}
+                sizes="100vw"
+              />
             </Link>
             <span>{offer.price}$</span>
             <span>-{offer.discount}%</span>

@@ -123,8 +123,8 @@ function SignIn({ params, searchParams }) {
   };
 
   useEffect(() => {
-    const auth = getOAuthSignInMethods().then((res) => {
-      const filteredProviders = res.providers?.filter(
+    getOAuthSignInMethods().then((res) => {
+      const filteredProviders = res?.filter(
         (provider) => provider.id !== "credentials"
       );
       setAuthProviders(filteredProviders);
