@@ -38,7 +38,7 @@
 .mainSwiper,
 .user__swiper,
 .offers-swiper {
-  max-width: 865px;
+  max-width: 895px;
   min-width: 400px;
   .swiper {
     border-radius: 10px !important;
@@ -83,6 +83,10 @@
 .offers-swiper {
   max-width: 550px;
   transform: translatex(33%);
+  @media (max-width: 990px) {
+    transform: translateX(1%);
+    max-width: 750px;
+  }
 
   .swiper {
     width: 100%;

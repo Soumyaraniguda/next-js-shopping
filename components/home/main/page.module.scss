@@ -4,18 +4,64 @@
   gap: 10px;
   grid-template-areas: "menu header header" "menu swiper user" "menu offers user";
 
+  @media (max-width: 1248px) {
+    grid-template-columns: 1fr 3fr; // Remove the user part screen from grid
+  }
+  @media (max-width: 990px) {
+    grid-template-columns: 80px 3fr;
+  }
+  // @media (max-width: 730px) {
+  //   grid-template-areas: "swiper menu offers";
+  //   grid-template-rows: 1fr;
+
+  //   .menu {
+  //     width: 100% !important;
+  //     height: fit-content !important;
+  //     &__li {
+  //       display: flex !important;
+  //       flex-direction: row !important;
+  //       flex-wrap: wrap;
+  //       justify-content: center;
+  //       li {
+  //         transform: translateY(-25px);
+  //       }
+  //     }
+  //   }
+  // }
   .menu {
     grid-area: menu;
     height: 580px;
     background: #fff;
     border-radius: 10px;
     box-shadow: $shadow-1;
+    @media (max-width: 990px) {
+      width: 80px;
+      svg {
+        transform: scale(1.5);
+      }
+      &__list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        ul {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    }
     &__header {
       width: 100%;
       height: 35px;
       background-color: $grey-color;
       border-bottom: 1px solid $grey-color;
       box-shadow: $shadow-2;
+      @media (max-width: 990px) {
+        display: none !important;
+        b {
+          display: none;
+        }
+      }
       svg {
         height: 23px;
         width: 23px;
@@ -39,6 +85,11 @@
           align-items: center;
           gap: 10px;
           color: #424141;
+          span {
+            @media (max-width: 990px) {
+              display: none; // Hide the text in the category menu if screen less than 990px
+            }
+          }
           svg {
             fill: #8c8484;
             stroke: #8c8484;
@@ -52,6 +103,7 @@
     height: 40px;
     display: flex;
     align-items: center;
+
     ul {
       display: flex;
       align-items: center;
@@ -90,8 +142,10 @@
     background: #fff;
     border-radius: 10px;
     box-shadow: $shadow-1;
-    &__header {
+    @media (max-width: 1248px) {
+      display: none; // Hide the user section in the home page if screen is less than 1248
     }
+
     &__container {
       padding: 1rem;
     }
