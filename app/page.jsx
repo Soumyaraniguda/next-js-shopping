@@ -10,6 +10,7 @@ import axios from "axios";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Main from "@/components/home/main/Main";
 import FlashDeals from "@/components/home/flashDeals/FlashDeals";
+import Categories from "@/components/home/categories/Categories";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -46,6 +47,7 @@ export default function Home() {
         <div className={styles.container}>
           <Main />
           <FlashDeals />
+          <Categories />
         </div>
       </div>
     </>
