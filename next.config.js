@@ -13,6 +13,7 @@ const nextConfig = {
       "cdn.pixabay.com",
       "ae01.alicdn.com",
       "img.ltwebstatic.com",
+      "ae03.alicdn.com",
     ],
   },
 };

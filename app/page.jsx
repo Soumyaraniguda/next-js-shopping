@@ -11,6 +11,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Main from "@/components/home/main/Main";
 import FlashDeals from "@/components/home/flashDeals/FlashDeals";
 import Categories from "@/components/home/categories/Categories";
+import ProductSwiper from "@/components/productsSwiper/ProductSwiper";
+import { gamingSwiper, homeImprovSwiper, women_swiper } from "@/data/home";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -48,6 +50,17 @@ export default function Home() {
           <Main />
           <FlashDeals />
           <Categories />
+          <ProductSwiper products={women_swiper} />
+          <ProductSwiper
+            products={gamingSwiper}
+            header="For Gamers"
+            bg="#2f82ff"
+          />
+          <ProductSwiper
+            products={homeImprovSwiper}
+            header="Home Decor"
+            bg="#ed4337"
+          />
         </div>
       </div>
     </>

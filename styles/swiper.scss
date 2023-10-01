@@ -180,16 +180,34 @@
       width: 180px !important;
     }
   }
-  .flasDeals__swiper {
+}
+
+.flasDeals__swiper {
+  .swiper-button-next,
+  .swiper-button-prev {
+    top: 120px !important;
+  }
+  @media (max-width: 450px) {
     .swiper-button-next,
     .swiper-button-prev {
-      top: 25px !important;
+      display: grid !important;
     }
-    @media (max-width: 450px) {
-      .swiper-button-next,
-      .swiper-button-prev {
-        display: grid !important;
-      }
+  }
+}
+
+.products__swiper {
+  .swiper-button-next,
+  .swiper-button-prev {
+    background: #fff;
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+    display: grid;
+    place-content: center;
+    color: #666;
+    box-shadow: $shadow-1;
+    &::after {
+      transform: scale(0.4);
     }
   }
 }
