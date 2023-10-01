@@ -256,12 +256,12 @@ export const menuArray = [
 export const userSwiperArray = [
   {
     image:
-      "https://ae01.alicdn.com/kf/S8bf3306f6f7b4855b147862236a5a12dD/45MM-Transparent-Mod-Kit-Case-for-Apple-Watch-Band-7-45-44MM-Rubber-Sports-Watchband-for.jpg_220x220xz.jpg_.webp",
+      "https://ae01.alicdn.com/kf/Sdb42f04658cd4a9c82018e22e90a78a2X.jpg_220x220.webp_480x480Q90.webp",
     link: "",
   },
   {
     image:
-      "https://ae01.alicdn.com/kf/Sdb42f04658cd4a9c82018e22e90a78a2X.jpg_220x220.webp_480x480Q90.webp",
+      "https://ae01.alicdn.com/kf/S8bf3306f6f7b4855b147862236a5a12dD/45MM-Transparent-Mod-Kit-Case-for-Apple-Watch-Band-7-45-44MM-Rubber-Sports-Watchband-for.jpg_220x220xz.jpg_.webp",
     link: "",
   },
   {

@@ -12,6 +12,7 @@ const nextConfig = {
       "lh3.googleusercontent.com",
       "cdn.pixabay.com",
       "ae01.alicdn.com",
+      "img.ltwebstatic.com",
     ],
   },
 };

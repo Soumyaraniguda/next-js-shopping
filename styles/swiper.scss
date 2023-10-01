@@ -31,15 +31,26 @@
 }
 
 .swiper {
-  margin-left: auto;
+  margin-left: 0 !important;
   margin-right: auto;
+  cursor: pointer;
+  &:hover {
+    .swiper-button-prev,
+    .swiper-button-next {
+      display: grid;
+    }
+  }
+}
+
+.mainSwiper {
+  max-width: 895px;
+  min-width: 400px;
 }
 
 .mainSwiper,
 .user__swiper,
+.flasDeals__swiper,
 .offers-swiper {
-  max-width: 895px;
-  min-width: 400px;
   .swiper {
     border-radius: 10px !important;
     overflow: hidden !important;
@@ -63,7 +74,7 @@
 
   .swiper-button-prev,
   .swiper-button-next {
-    color: #fff;
+    color: #fff !important;
     transform: scale(0.5) !important;
     width: 50px !important;
     height: 80px !important;
@@ -81,7 +92,9 @@
 }
 
 .offers-swiper {
-  max-width: 550px;
+  max-width: 895px;
+  min-width: 400px;
+  max-width: 700px;
   transform: translatex(33%);
   @media (max-width: 990px) {
     transform: translateX(1%);
@@ -165,6 +178,18 @@
     img {
       height: 240px !important;
       width: 180px !important;
+    }
+  }
+  .flasDeals__swiper {
+    .swiper-button-next,
+    .swiper-button-prev {
+      top: 25px !important;
+    }
+    @media (max-width: 450px) {
+      .swiper-button-next,
+      .swiper-button-prev {
+        display: grid !important;
+      }
     }
   }
 }

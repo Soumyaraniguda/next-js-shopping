@@ -81,7 +81,7 @@ function User() {
         </ul>
 
         <div className={styles.user__swiper}>
-          <Swiper
+          {/* <Swiper
             effect={"cards"}
             grabCursor={true}
             navigation={true}
@@ -101,7 +101,7 @@ function User() {
                 </Link>
               </SwiperSlide>
             ))}
-          </Swiper>
+          </Swiper> */}
         </div>
       </div>
       <Image

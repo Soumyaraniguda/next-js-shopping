@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession, signIn, signOut } from "next-auth/react";
 import Main from "@/components/home/main/Main";
+import FlashDeals from "@/components/home/flashDeals/FlashDeals";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -44,6 +45,7 @@ export default function Home() {
       <div className={styles.home}>
         <div className={styles.container}>
           <Main />
+          <FlashDeals />
         </div>
       </div>
     </>
