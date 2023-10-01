@@ -13,10 +13,12 @@ import FlashDeals from "@/components/home/flashDeals/FlashDeals";
 import Categories from "@/components/home/categories/Categories";
 import ProductSwiper from "@/components/productsSwiper/ProductSwiper";
 import { gamingSwiper, homeImprovSwiper, women_swiper } from "@/data/home";
+import ProductCard from "@/components/productCard/ProductCard";
 
 export default function Home() {
   const dispatch = useDispatch();
   const { data: session } = useSession();
+  const [products, setProducts] = useState();
 
   console.log({ session });
 
@@ -45,7 +47,8 @@ export default function Home() {
 
   useEffect(() => {
     axios.get("/api/product").then((response) => {
-      console.log(response);
+      console.log(response.data?.data);
+      setProducts(response.data?.data);
     });
   }, []);
 
@@ -57,7 +60,7 @@ export default function Home() {
           <FlashDeals />
           <Categories />
           <ProductSwiper products={women_swiper} />
-          <ProductSwiper
+          {/* <ProductSwiper
             products={gamingSwiper}
             header="For Gamers"
             bg="#2f82ff"
@@ -66,7 +69,12 @@ export default function Home() {
             products={homeImprovSwiper}
             header="Home Decor"
             bg="#ed4337"
-          />
+          /> */}
+          <div className={styles.products}>
+            {products?.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
         </div>
       </div>
     </>
