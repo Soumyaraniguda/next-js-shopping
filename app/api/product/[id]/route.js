@@ -40,11 +40,16 @@ export const GET = async (request, { params }) => {
       discount: subProduct.discount,
       sku: subProduct.sku,
       colors: product.subProducts.map((p) => p.color),
-      priceRanges:
-        prices.length > 1
-          ? `From ${prices[0]} to ${prices[prices.length - 1]}$`
-          : "",
-      price,
+      priceRange: subProduct.discount
+        ? `From ${(prices[0] - prices[0] / subProduct.discount).toFixed(
+            2
+          )} to ${(
+            prices[prices.length - 1] -
+            prices[prices.length - 1] / subProduct.discount
+          ).toFixed(2)}$`
+        : `From ${prices[0]} to ${prices[prices.length - 1]}$`,
+      price: price.toFixed(2),
+      priceBefore: priceBefore,
       quantity: product.subProducts[style].sizes[size].qty,
     };
 

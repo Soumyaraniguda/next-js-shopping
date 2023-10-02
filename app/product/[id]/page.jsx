@@ -7,6 +7,7 @@ import axios from "axios";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/page";
 import ProductDetailsMainSwiper from "@/components/ProductDetails/mainSwiper/ProductDetailsMainSwiper";
+import ProductDetailsInfo from "@/components/ProductDetails/infos/ProductDetailsInfo";
 
 function Product({ params, query }) {
   const searchParams = useSearchParams();
@@ -37,15 +38,16 @@ function Product({ params, query }) {
           </div>
 
           <div className={styles.product__main}>
-            {product ? (
+            {product && (
               <ProductDetailsMainSwiper
                 images={product?.images}
                 activeImage={activeImage}
               />
-            ) : (
-              <></>
             )}
-            <div></div>
+            <ProductDetailsInfo
+              product={product}
+              setActiveImage={setActiveImage}
+            />
           </div>
         </div>
       </div>
