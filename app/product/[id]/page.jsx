@@ -4,18 +4,18 @@ import styles from "@/styles/product.module.scss";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import ProductDetails from "@/components/Product/ProductDetails";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/page";
+import ProductDetailsMainSwiper from "@/components/ProductDetails/mainSwiper/ProductDetailsMainSwiper";
 
 function Product({ params, query }) {
   const searchParams = useSearchParams();
   const productStyle = searchParams.get("style");
   const productId = params.id;
   const [product, setProduct] = useState();
+  const [activeImage, setActiveImage] = useState("");
 
   useEffect(() => {
-    console.log({ productId, productStyle });
     axios
       .get(`/api/product/${productId}?style=${productStyle}`)
       .then((response) => {
@@ -34,6 +34,18 @@ function Product({ params, query }) {
             {product?.subCategories.map((sub) => (
               <span> / {sub.name}</span>
             ))}
+          </div>
+
+          <div className={styles.product__main}>
+            {product ? (
+              <ProductDetailsMainSwiper
+                images={product?.images}
+                activeImage={activeImage}
+              />
+            ) : (
+              <></>
+            )}
+            <div></div>
           </div>
         </div>
       </div>
