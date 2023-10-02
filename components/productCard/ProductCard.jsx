@@ -24,7 +24,7 @@ function ProductCard({ product }) {
   return (
     <div className={styles.productCard}>
       <div className={styles.productCard__container}>
-        <Link href={`/product/${product.slug}?style=${active}`}>
+        <Link href={`/product/${product._id}?style=${active}`}>
           <div>
             <ProductCardSwiper images={images}></ProductCardSwiper>
           </div>

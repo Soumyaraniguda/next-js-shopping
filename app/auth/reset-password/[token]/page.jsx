@@ -12,6 +12,8 @@ import axios from "axios";
 import DotLoaderSpinner from "@/components/loaders/DotLoader";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/page";
 
 function ResetPassword({ params }) {
   const router = useRouter();
@@ -85,6 +87,7 @@ function ResetPassword({ params }) {
 
   return (
     <>
+      <Header />
       {loading && <DotLoaderSpinner loading={loading} />}
       <div className={styles.forgot}>
         <div>
@@ -137,6 +140,7 @@ function ResetPassword({ params }) {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

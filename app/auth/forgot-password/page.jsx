@@ -10,6 +10,8 @@ import LoginInput from "@/components/inputs/loginInInput/page";
 import CurvedButtonWithIcon from "@/components/buttons/CurvedButtonWithIcon/page";
 import axios from "axios";
 import DotLoaderSpinner from "@/components/loaders/DotLoader";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/page";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -42,6 +44,7 @@ function ForgotPassword() {
 
   return (
     <>
+      <Header />
       {loading && <DotLoaderSpinner loading={loading} />}
       <div className={styles.forgot}>
         <div>
@@ -85,6 +88,7 @@ function ForgotPassword() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

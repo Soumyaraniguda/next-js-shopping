@@ -1,4 +1,6 @@
+import Category from "@/models/Category";
 import Product from "@/models/Product";
+import SubCategory from "@/models/SubCategory";
 import db from "@/utils/database";
 import { NextResponse } from "next/server";
 
@@ -10,18 +12,21 @@ export const GET = async (request, { params }) => {
 
   try {
     await db.connectToDB();
-    let products = await Product.find().sort({ createdAt: -1 }).lean();
+    let product = await Product.findById(params.id)
+      .populate({ path: "category", model: Category })
+      .populate({ path: "subCategories._id", model: SubCategory })
+      .lean();
 
-    let product = null;
-    let index = -1;
+    // let product = null;
+    // let index = -1;
 
-    for (let i = 0; i < products.length; i++) {
-      if (products[i].slug === slug) {
-        product = products[i];
-        index = i;
-        break;
-      }
-    }
+    // for (let i = 0; i < products.length; i++) {
+    //   if (products[i].slug === slug) {
+    //     product = products[i];
+    //     index = i;
+    //     break;
+    //   }
+    // }
     let subProduct = product.subProducts[style];
     let prices = subProduct.sizes.map((s) => s.price).sort((a, b) => a - b);
     let discount = product.subProducts[style].discount;

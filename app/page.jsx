@@ -54,6 +54,7 @@ export default function Home() {
 
   return (
     <>
+      <Header />
       <div className={styles.home}>
         <div className={styles.container}>
           <Main />
@@ -77,6 +78,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

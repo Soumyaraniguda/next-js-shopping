@@ -5,7 +5,7 @@ const { ObjectId } = mongoose.Schema;
 const categorySchema = new mongoose.Schema(
   {
     name: {
-      type: string,
+      type: String,
       required: true,
       minlength: [2, "Must be atleast 2 characters"],
       maxlength: [32, "Should not more than 32 characters"],

@@ -15,6 +15,8 @@ import axios from "axios";
 import DotLoaderSpinner from "@/components/loaders/DotLoader";
 import { useRouter } from "next/navigation";
 import InputWithCsrf from "@/components/InputWithCsrf";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/page";
 
 const initialValues = {
   loginEmail: "",
@@ -133,6 +135,7 @@ function SignIn({ params, searchParams }) {
 
   return (
     <>
+      <Header />
       {loading && <DotLoaderSpinner loading={loading} />}
 
       <div className={styles.login}>
@@ -281,6 +284,7 @@ function SignIn({ params, searchParams }) {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }
