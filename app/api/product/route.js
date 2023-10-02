@@ -15,7 +15,6 @@ export const GET = async (request) => {
         status: 200,
       }
     );
-    await db.disConnectDB();
   } catch (error) {
     return NextResponse.json(
       {

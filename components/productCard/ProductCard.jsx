@@ -52,8 +52,9 @@ function ProductCard({ product }) {
               productStyles.map((productStyle, i) =>
                 productStyle.image ? (
                   <img
+                    key={i}
                     src={productStyle.image}
-                    className={i == active && styles.active}
+                    className={i == active ? styles.active : ""}
                     alt=""
                     onMouseOver={() => {
                       setActive(i);
@@ -61,6 +62,7 @@ function ProductCard({ product }) {
                   />
                 ) : (
                   <span
+                    key={i}
                     style={{ backgroundColor: `${productStyle.color}` }}
                     onMouseOver={() => {
                       setActive(i);
