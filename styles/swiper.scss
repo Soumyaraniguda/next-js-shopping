@@ -211,3 +211,35 @@
     }
   }
 }
+
+.similarProducts__swiper {
+  max-width: 550px;
+
+  // .swiper-button-next,
+  // .swiper-button-prev {
+  //   background: grey;
+  //   height: 35px;
+  //   width: 35px;
+  //   border-radius: 50%;
+  //   display: grid;
+  //   place-content: center;
+  //   color: white;
+  //   box-shadow: $shadow-1;
+  //   &::after {
+  //     transform: scale(0.4);
+  //   }
+  // }
+  .swiper-pagination {
+    display: none !important;
+  }
+  img {
+    width: 100px;
+    height: 160px;
+    object-fit: cover;
+    cursor: pointer;
+    @media (min-width: 461px) {
+      width: 150px;
+      height: 200px;
+    }
+  }
+}

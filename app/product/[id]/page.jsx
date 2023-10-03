@@ -34,7 +34,7 @@ function Product({ params, query }) {
     <div>
       <Header />
       <div className={styles.product}>
-        <div className={styles.container}>
+        <div className={styles.product__container}>
           <div className={styles.path}>
             Home / {product?.category.name}
             {product?.subCategories.map((sub) => (

@@ -8,6 +8,7 @@ import { TbPlus, TbMinus } from "react-icons/tb";
 import { BsHandbagFill, BsHeart } from "react-icons/bs";
 import ShareProduct from "../share/ShareProduct";
 import ProductDetailsAccordion from "./ProductDetailsAccordion";
+import SimilarProductsSwiper from "../ similarProductsSwiper/SimilarProductsSwiper";
 
 function ProductDetailsInfo({ product, setActiveImage }) {
   const queryParams = useSearchParams();
@@ -151,6 +152,8 @@ function ProductDetailsInfo({ product, setActiveImage }) {
             descriptionAndDetails={[product?.description, ...product?.details]}
           />
         )}
+
+        <SimilarProductsSwiper />
       </div>
     </div>
   );

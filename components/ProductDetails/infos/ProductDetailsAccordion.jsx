@@ -72,17 +72,15 @@ function ProductDetailsAccordion({ descriptionAndDetails }) {
             {description}
           </div>
 
-          <Typography>
-            {details?.map((info) => (
-              <div
-                key={JSON.stringify(info)}
-                className={styles.infos__accordion_grid}
-              >
-                <span>{info.name}:</span>
-                <span>{info.value}</span>
-              </div>
-            ))}
-          </Typography>
+          {details?.map((info) => (
+            <div
+              key={JSON.stringify(info)}
+              className={styles.infos__accordion_grid}
+            >
+              <span>{info.name}:</span>
+              <span>{info.value}</span>
+            </div>
+          ))}
         </AccordionDetails>
       </Accordion>
       <Accordion

@@ -1,6 +1,5 @@
 import styles from "./styles.module.scss";
 import "../../../styles/swiper.scss";
-import Image from "next/image";
 import ReactImageMagnify from "react-image-magnify";
 import { useState } from "react";
 
