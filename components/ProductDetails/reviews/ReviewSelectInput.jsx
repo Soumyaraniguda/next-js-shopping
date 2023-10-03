@@ -29,8 +29,12 @@ function ReviewSelectInput({ property, text, data, handleChange }) {
             property || `Select ${text}`
           ) : text == "Style" && property?.image ? (
             <Image src={property.image} height={20} width={20} alt="" />
+          ) : text == "How does it fit" && property ? (
+            property
+          ) : !property && text == "How does it fit" ? (
+            "How does it fit"
           ) : (
-            "Select Style"
+            "Select style"
           )}
           <IoArrowDown />
         </span>
@@ -54,6 +58,13 @@ function ReviewSelectInput({ property, text, data, handleChange }) {
                     <span>
                       <Image src={item.image} height={20} width={20} alt="" />
                     </span>
+                  </li>
+                );
+              }
+              if (text == "How does it fit") {
+                return (
+                  <li key={i} onClick={() => handleChange(item)}>
+                    <span>{item}</span>
                   </li>
                 );
               }
