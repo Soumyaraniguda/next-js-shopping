@@ -3,16 +3,32 @@ import styles from "./styles.module.scss";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { TbPlus, TbMinus } from "react-icons/tb";
+import { BsHandbagFill, BsHeart } from "react-icons/bs";
+import ShareProduct from "../share/ShareProduct";
 
-function ProductDetailsInfo({ product }) {
+function ProductDetailsInfo({ product, setActiveImage }) {
   const queryParams = useSearchParams();
   const size = queryParams.get("size");
   const style = queryParams.get("style");
   const [productSize, setProductSize] = useState();
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     setProductSize(size);
+    if (quantity > product?.quantity) {
+      setQuantity(product.quantity);
+    }
   }, [size]);
+
+  // Reset the product size and quantity when style changed
+  useEffect(() => {
+    setProductSize("");
+    setQuantity(1);
+  }, [style]);
+
+  console.log({ product, productSize, style });
 
   return (
     <div className={styles.infos}>
@@ -29,8 +45,8 @@ function ProductDetailsInfo({ product }) {
             readOnly
             style={{ color: "#FACF19" }}
           />
-          {product?.numReviews}
-          {product?.numReviews === 1 ? "review" : "reviews"}
+          ({product?.numReviews}
+          {product?.numReviews === 1 ? " review" : " reviews"})
         </div>
 
         <div className={styles.infos__price}>
@@ -38,7 +54,6 @@ function ProductDetailsInfo({ product }) {
           {product?.discount > 0 ? (
             <h3>
               {size && <span>{product?.priceBefore}$</span>}
-
               <span> (-{product.discount}%)</span>
             </h3>
           ) : (
@@ -61,12 +76,15 @@ function ProductDetailsInfo({ product }) {
 
         <div className={styles.infos__sizes}>
           <h4>Select a size:</h4>
-          <div className={styles.infos__wrap}>
+          <div className={styles.infos__sizes_wrap}>
             {product?.sizes.map((size, i) => (
-              <Link href={`/product/${product._id}?style=${style}&size=${i}`}>
+              <Link
+                key={i}
+                href={`/product/${product._id}?style=${style}&size=${i}`}
+              >
                 <div
                   className={`${styles.infos__sizes_size} ${
-                    i == productSize ? styles.active_size : ""
+                    i === parseInt(productSize) ? styles.active_size : ""
                   }`}
                   onClick={() => setProductSize(size.size)}
                 >
@@ -76,6 +94,55 @@ function ProductDetailsInfo({ product }) {
             ))}
           </div>
         </div>
+
+        <div className={styles.infos__colors}>
+          {product?.colors &&
+            product?.colors.map((color, i) => (
+              <span
+                className={i == style ? styles.active_color : ""}
+                key={i}
+                onMouseOver={() =>
+                  setActiveImage(product.subProducts[i].images[0].url)
+                }
+              >
+                <Link href={`/product/${product._id}?style=${i}`}>
+                  <Image src={color.image} width={50} height={50} alt="" />
+                </Link>
+              </span>
+            ))}
+        </div>
+
+        <div className={styles.infos__qty}>
+          <button
+            onClick={() => quantity > 1 && setQuantity((prev) => prev - 1)}
+          >
+            <TbMinus />
+          </button>
+          <span>{quantity}</span>
+          <button
+            onClick={() =>
+              quantity < product?.quantity && setQuantity((prev) => prev + 1)
+            }
+          >
+            <TbPlus />
+          </button>
+        </div>
+
+        <div className={styles.infos__actions}>
+          <button
+            disabled={product?.quantity < 1}
+            style={{ cursor: `${product?.quantity < 1 ? "not-allowed" : ""}` }}
+          >
+            <BsHandbagFill />
+            <b>Add to cart</b>
+          </button>
+
+          <button>
+            <BsHeart />
+            <b>Wishlist</b>
+          </button>
+        </div>
+        <ShareProduct />
       </div>
     </div>
   );

@@ -12,18 +12,23 @@ import ProductDetailsInfo from "@/components/ProductDetails/infos/ProductDetails
 function Product({ params, query }) {
   const searchParams = useSearchParams();
   const productStyle = searchParams.get("style");
+  const productSize = searchParams.get("size");
   const productId = params.id;
   const [product, setProduct] = useState();
   const [activeImage, setActiveImage] = useState("");
 
   useEffect(() => {
     axios
-      .get(`/api/product/${productId}?style=${productStyle}`)
+      .get(
+        `/api/product/${productId}?style=${productStyle}&size=${
+          productSize || 0
+        }`
+      )
       .then((response) => {
         console.log(response.data);
         setProduct(response.data);
       });
-  }, [productStyle, productId]);
+  }, [productStyle, productId, productSize]);
 
   return (
     <div>
