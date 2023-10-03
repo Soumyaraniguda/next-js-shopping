@@ -167,6 +167,37 @@
       }
     }
   }
+  &__accordion {
+    margin-top: 1rem;
+    max-width: 400px;
+    &_grid {
+      display: flex;
+      justify-content: space-between;
+      color: #666;
+      font-weight: normal;
+      span {
+        display: flex;
+        gap: 2px;
+        &:last-of-type {
+          width: 180px;
+        }
+        p {
+          text-transform: capitalize;
+        }
+      }
+    }
+    &_sub_summary {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    .accordion {
+      border: none;
+      font-weight: 700;
+      &__summary {
+        background: transparent;
+      }
+    }
+  }
 }
 
 .active_size {
