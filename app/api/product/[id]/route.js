@@ -68,6 +68,16 @@ export const GET = async (request, { params }) => {
           percentage: 16,
         },
       ],
+      // .flat() convert array of arrays into single array
+      // .filter() removing duplicate sizes
+      allSizes: product.subProducts
+        .map((p) => p.sizes)
+        .flat()
+        .sort((a, b) => a.size - b.size)
+        .filter(
+          (element, index, array) =>
+            array.findIndex((el2) => el2.size === element.size) === index
+        ),
     };
 
     await db.disConnectDB();
