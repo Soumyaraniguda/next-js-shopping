@@ -51,6 +51,23 @@ export const GET = async (request, { params }) => {
       price: price.toFixed(2),
       priceBefore: priceBefore,
       quantity: product.subProducts[style].sizes[size].qty,
+      ratings: [
+        {
+          percentage: 76,
+        },
+        {
+          percentage: 14,
+        },
+        {
+          percentage: 6,
+        },
+        {
+          percentage: 4,
+        },
+        {
+          percentage: 16,
+        },
+      ],
     };
 
     await db.disConnectDB();

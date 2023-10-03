@@ -8,6 +8,7 @@ import Header from "@/components/header/Header";
 import Footer from "@/components/footer/page";
 import ProductDetailsMainSwiper from "@/components/ProductDetails/mainSwiper/ProductDetailsMainSwiper";
 import ProductDetailsInfo from "@/components/ProductDetails/infos/ProductDetailsInfo";
+import ProductReviews from "@/components/ProductDetails/reviews/ProductReviews";
 
 function Product({ params, query }) {
   const searchParams = useSearchParams();
@@ -54,6 +55,8 @@ function Product({ params, query }) {
               setActiveImage={setActiveImage}
             />
           </div>
+
+          <ProductReviews product={product} />
         </div>
       </div>
       <Footer />
