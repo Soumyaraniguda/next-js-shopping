@@ -2,6 +2,7 @@ import { useState } from "react";
 import ReviewSelectInput from "./ReviewSelectInput";
 import styles from "./styles.module.scss";
 import { Rating } from "@mui/material";
+import ReviewImageInput from "./ReviewImagesInput";
 
 let fits = ["Small", "True to size", "Large"];
 
@@ -11,6 +12,7 @@ function ReviewForm({ product }) {
   const [fit, setFit] = useState();
   const [review, setReview] = useState("");
   const [rating, setRating] = useState(0);
+  const [images, setImages] = useState([]);
 
   return (
     <div className={styles.reviews__form}>
@@ -37,6 +39,7 @@ function ReviewForm({ product }) {
             handleChange={setFit}
           />
         </div>
+        <ReviewImageInput images={images} setImages={setImages} />
         <textarea
           name="review"
           id=""
