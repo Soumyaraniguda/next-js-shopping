@@ -45,8 +45,6 @@ function ProductDetailsAccordion({ descriptionAndDetails }) {
   const description = descriptionAndDetails?.[0];
   const details = descriptionAndDetails?.slice(1, descriptionAndDetails.length);
 
-  console.log({ descriptionAndDetails, details, description });
-
   const [expanded, setExpanded] = React.useState("panel1");
 
   const handleChange = (panel) => (event, newExpanded) => {

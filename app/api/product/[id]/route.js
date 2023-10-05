@@ -1,6 +1,7 @@
 import Category from "@/models/Category";
 import Product from "@/models/Product";
 import SubCategory from "@/models/SubCategory";
+import User from "@/models/User";
 import db from "@/utils/database";
 import { NextResponse } from "next/server";
 
@@ -15,6 +16,7 @@ export const GET = async (request, { params }) => {
     let product = await Product.findById(params.id)
       .populate({ path: "category", model: Category })
       .populate({ path: "subCategories._id", model: SubCategory })
+      .populate({ path: "reviews.reviewBy", model: User })
       .lean();
 
     // let product = null;

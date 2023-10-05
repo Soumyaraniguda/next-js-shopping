@@ -7,8 +7,6 @@ function ReviewImageInput({ images, setImages }) {
   const inputRef = useRef(null);
   const [error, setError] = useState("");
 
-  console.log({ error });
-
   const handleImages = (e) => {
     let files = Array.from(e.target.files);
 

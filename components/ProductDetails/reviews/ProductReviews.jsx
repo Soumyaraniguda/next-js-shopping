@@ -2,17 +2,19 @@ import { Rating } from "@mui/material";
 import styles from "./styles.module.scss";
 import { signIn, useSession } from "next-auth/react";
 import ReviewForm from "./ReviewForm";
+import ReviewsTable from "./ReviewsTable";
 
 function ProductReviews({ product }) {
   const { data: session } = useSession();
 
   return (
-    <div classNAme={styles.reviews}>
+    <div className={styles.reviews}>
       <div className={styles.reviews__container}>
         <h1>Customer Reviews ({product?.reviews.length})</h1>
         <div className={styles.reviews__stats}>
           <div className={styles.reviews__stats_overview}>
             <span>Average Rating</span>
+
             <div className={styles.reviews__stats_overview_rating}>
               <Rating
                 name="half-rating-read"
@@ -53,6 +55,8 @@ function ProductReviews({ product }) {
             Login to add review
           </button>
         )}
+
+        <ReviewsTable reviews={product?.reviews} />
       </div>
     </div>
   );
