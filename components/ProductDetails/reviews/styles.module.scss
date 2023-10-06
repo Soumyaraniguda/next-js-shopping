@@ -70,7 +70,8 @@
       }
     }
   }
-  &__form {
+  &__form,
+  &__table {
     margin-top: 1rem;
     padding: 1rem;
     background: #f7f8fa;
@@ -87,7 +88,7 @@
       &__header {
         position: relative;
         min-width: 80px;
-        max-width: 170px;
+        max-width: 250px;
         min-height: 40px;
         border: 1px solid #ccc;
         display: flex;
@@ -278,4 +279,16 @@
   padding-top: 1rem;
   display: flex;
   justify-content: flex-end;
+}
+
+.reviews__table {
+  &_header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 0 1rem 1rem 1rem;
+    border-bottom: 1px solid #ccc;
+  }
 }

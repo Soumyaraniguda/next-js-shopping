@@ -56,7 +56,11 @@ function ProductReviews({ product }) {
           </button>
         )}
 
-        <ReviewsTable reviews={product?.reviews} />
+        <ReviewsTable
+          reviews={product?.reviews}
+          allSizes={product?.allSizes}
+          colors={product?.colors}
+        />
       </div>
     </div>
   );
