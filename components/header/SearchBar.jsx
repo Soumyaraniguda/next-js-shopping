@@ -14,12 +14,7 @@ function SearchBar() {
       <div className={styles.main__container}>
         <Link href="/">
           <span className={styles.logo}>
-            <Image
-              alt="logo"
-              src="/images/user-avatar.svg"
-              width={28}
-              height={28}
-            />
+            <Image alt="logo" src="/images/logo.png" width={100} height={28} />
           </span>
         </Link>
         <div className={styles.search}>

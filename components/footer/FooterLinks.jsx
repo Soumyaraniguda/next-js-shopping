@@ -11,8 +11,8 @@ function FooterLinks() {
             {index === 0 ? (
               <Image
                 alt="logo"
-                src="/images/user-avatar.svg"
-                width={28}
+                src="/images/logo.png"
+                width={100}
                 height={28}
               />
             ) : (
