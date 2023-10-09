@@ -26,7 +26,7 @@ function Product({ params, query }) {
         }`
       )
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setProduct(response.data);
       });
   }, [productStyle, productId, productSize]);

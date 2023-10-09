@@ -15,15 +15,17 @@ function ProductReviews({ product }) {
           <div className={styles.reviews__stats_overview}>
             <span>Average Rating</span>
 
-            <div className={styles.reviews__stats_overview_rating}>
-              <Rating
-                name="half-rating-read"
-                defaultValue={product?.rating}
-                readOnly
-                preceision={0.5}
-              />
-              {product?.rating === 0 ? "No review yet" : product?.rating}
-            </div>
+            {product?.rating && (
+              <div className={styles.reviews__stats_overview_rating}>
+                <Rating
+                  name="half-rating-read"
+                  defaultValue={product?.rating || 1}
+                  readOnly
+                  preceision={0.5}
+                />
+                {product?.rating === 0 ? "No review yet" : product?.rating}
+              </div>
+            )}
           </div>
 
           <div className={styles.reviews__stats_reviews}>

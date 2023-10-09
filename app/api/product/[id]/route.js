@@ -9,7 +9,6 @@ export const GET = async (request, { params }) => {
   const url = new URL(request.url);
   const style = url.searchParams.get("style") || 0;
   const size = url.searchParams.get("size") || 0;
-  const slug = params.slug;
 
   try {
     await db.connectToDB();
@@ -37,6 +36,7 @@ export const GET = async (request, { params }) => {
 
     let transformedProduct = {
       ...product,
+      style,
       images: subProduct.images,
       sizes: subProduct.sizes,
       discount: subProduct.discount,

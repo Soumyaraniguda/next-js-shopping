@@ -43,8 +43,15 @@ function ReviewCard({ review }) {
       <div className={styles.flex}>
         <div className={styles.review__images}>
           {review?.images?.length > 0 ? (
-            review?.images.map((image) => (
-              <Image src={image.url} height={0} width={0} sizes="100vw" />
+            review?.images.map((image, i) => (
+              <Image
+                key={i}
+                src={image.url}
+                height={0}
+                width={0}
+                sizes="100vw"
+                alt=""
+              />
             ))
           ) : (
             <></>

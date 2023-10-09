@@ -9,28 +9,69 @@ import { BsHandbagFill, BsHeart } from "react-icons/bs";
 import ShareProduct from "./share/ShareProduct";
 import ProductDetailsAccordion from "./ProductDetailsAccordion";
 import SimilarProductsSwiper from "../similarProductsSwiper/SimilarProductsSwiper";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart, updateCart } from "@/redux/cartSlice";
 
 function ProductDetailsInfo({ product, setActiveImage }) {
+  const dispatch = useDispatch();
   const queryParams = useSearchParams();
-  const size = queryParams.get("size");
-  const style = queryParams.get("style");
+  const size = queryParams.get("size") || 0;
+  const style = queryParams.get("style") || 0;
   const [productSize, setProductSize] = useState();
-  const [quantity, setQuantity] = useState(1);
+  const [qty, setQty] = useState(1);
+  const [error, setError] = useState("");
+  const { cart } = useSelector((state) => ({ ...state }));
+
+  console.log({ productSize });
+
+  const handleAddToCart = async () => {
+    if (!size) {
+      setError("Please select a size");
+      return;
+    }
+    const { data } = await axios.get(
+      `/api/product/get-product-to-add-in-cart/${product._id}?style=${product?.style}&size=${size}`
+    );
+    console.log("data =", data);
+
+    if (qty > data?.quantity) {
+      setError(
+        "The quantity you have chose is more than the stock. Try lowering the quantity"
+      );
+    } else if (data?.quantity < qty) {
+      setError("The product is out of stock");
+    } else {
+      let _uid = `${data._id}_${product.style}_${size}`;
+      let itemExistInCart = cart.cartItems?.find((p) => p._uid === _uid);
+      console.log({ cartItems: cart?.cartItems, itemExistInCart });
+
+      if (itemExistInCart) {
+        let newCart = cart.cartItems?.map((p) => {
+          if (p._uid == itemExistInCart._uid) {
+            return { ...p, qty: qty };
+          }
+          return p;
+        });
+        dispatch(updateCart(newCart));
+      } else {
+        dispatch(addToCart({ ...data, qty, size: data.size, _uid }));
+      }
+    }
+  };
 
   useEffect(() => {
     setProductSize(size);
-    if (quantity > product?.quantity) {
-      setQuantity(product.quantity);
+    if (qty > product?.quantity) {
+      setQty(product.quantity);
     }
-  }, [size]);
+  }, [size, qty, product]);
 
   // Reset the product size and quantity when style changed
   useEffect(() => {
     setProductSize("");
-    setQuantity(1);
+    setQty(1);
   }, [style]);
-
-  console.log({ product, productSize, style });
 
   return (
     <div className={styles.infos}>
@@ -115,15 +156,13 @@ function ProductDetailsInfo({ product, setActiveImage }) {
         </div>
 
         <div className={styles.infos__qty}>
-          <button
-            onClick={() => quantity > 1 && setQuantity((prev) => prev - 1)}
-          >
+          <button onClick={() => qty > 1 && setQty((prev) => prev - 1)}>
             <TbMinus />
           </button>
-          <span>{quantity}</span>
+          <span>{qty}</span>
           <button
             onClick={() =>
-              quantity < product?.quantity && setQuantity((prev) => prev + 1)
+              qty < product?.quantity && setQty((prev) => prev + 1)
             }
           >
             <TbPlus />
@@ -134,6 +173,7 @@ function ProductDetailsInfo({ product, setActiveImage }) {
           <button
             disabled={product?.quantity < 1}
             style={{ cursor: `${product?.quantity < 1 ? "not-allowed" : ""}` }}
+            onClick={() => handleAddToCart()}
           >
             <BsHandbagFill />
             <b>Add to cart</b>
@@ -144,7 +184,7 @@ function ProductDetailsInfo({ product, setActiveImage }) {
             <b>Wishlist</b>
           </button>
         </div>
-
+        {error && <span className={styles.error}>{error}</span>}
         <ShareProduct />
 
         {product?.details && product?.description && (

@@ -7,7 +7,8 @@ import { FaOpencart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 function SearchBar() {
-  const { cart } = useSelector((state) => ({ ...state }));
+  // const { cart } = useSelector((state) => ({ ...state }));
+  const cart = [];
 
   return (
     <div className={styles.main}>
