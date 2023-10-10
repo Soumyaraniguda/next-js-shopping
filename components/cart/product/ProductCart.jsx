@@ -2,14 +2,14 @@ import Image from "next/image";
 import styles from "./styles.module.scss";
 import { BsHeart } from "react-icons/bs";
 import { AiOutlineDelete } from "react-icons/ai";
-import { MdOutlineKeyboard, MdOutlineKeyboardArrowRight } from "react-icons/md";
-import { useState } from "react";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCart } from "@/redux/cartSlice";
 
-function ProductCart({ product }) {
+function ProductCart({ product, selectedItems, setSelectedItems }) {
   const dispatch = useDispatch();
-  const [active, setActive] = useState("");
+  const [selected, setSelected] = useState("");
   const { cart } = useSelector((state) => ({ ...state }));
 
   const handleUpdateQty = (type) => {
@@ -22,6 +22,7 @@ function ProductCart({ product }) {
       }
       return item;
     });
+
     dispatch(updateCart(newCart));
   };
 
@@ -29,6 +30,21 @@ function ProductCart({ product }) {
     let newCart = cart.cartItems.filter((item) => item._uid !== id);
     dispatch(updateCart(newCart));
   };
+
+  const handleSelect = () => {
+    let newItems = [...selectedItems];
+    if (selected) {
+      newItems = selectedItems.filter((p) => p._uid != product._uid);
+    } else {
+      newItems = [...selectedItems, product];
+    }
+    setSelectedItems(newItems);
+  };
+
+  useEffect(() => {
+    const productSelected = selectedItems.find((p) => p._uid === product._uid);
+    setSelected(productSelected);
+  }, [selectedItems]);
 
   return (
     <div className={`${styles.card} ${styles.product}`}>
@@ -40,7 +56,7 @@ function ProductCart({ product }) {
 
       <div className={styles.product__image}>
         <div
-          className={`${styles.checkbox} ${active ? styles.active : ""}`}
+          className={`${styles.checkbox} ${selected ? styles.active : ""}`}
           onClick={() => handleSelect()}
         ></div>
 

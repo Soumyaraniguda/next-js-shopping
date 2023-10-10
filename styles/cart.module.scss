@@ -13,6 +13,7 @@
     color: #222;
     max-width: 1300px;
     margin: 0 auto;
+    gap: 1rem;
     @media (min-width: 900px) {
       grid-template-areas:
         "header checkout"
@@ -33,5 +34,6 @@
   }
   &__products {
     grid-area: products;
+    transform: translateY(-130px);
   }
 }

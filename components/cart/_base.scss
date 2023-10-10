@@ -1,7 +1,7 @@
 .card {
   background: #fff;
   padding: 1rem;
-  margin-top: 1rem;
+  // margin-top: 1rem;
 }
 
 .active {
@@ -12,4 +12,15 @@
 .header {
   color: #2222 !important;
   font-size: 22px;
+}
+
+.checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #cccccc;
+  cursor: pointer;
+  &:hover {
+    border-color: $blue-color;
+  }
 }
