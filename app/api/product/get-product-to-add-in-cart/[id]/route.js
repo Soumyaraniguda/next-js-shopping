@@ -23,7 +23,7 @@ export const GET = async (request, { params }) => {
     let transformedProduct = {
       _id: product._id,
       style: Number(style),
-      sizes: subProduct.sizes[size].size,
+      size: subProduct.sizes[size].size,
       name: product.name,
       description: product.description,
       slug: product.slug,
@@ -33,6 +33,7 @@ export const GET = async (request, { params }) => {
       brand: product.brand,
       price,
       priceBefore,
+      discount,
       quantity: subProduct.sizes[size].qty,
       shipping: product.shipping,
     };

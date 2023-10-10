@@ -7,8 +7,7 @@ import { FaOpencart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 function SearchBar() {
-  // const { cart } = useSelector((state) => ({ ...state }));
-  const cart = [];
+  const { cart } = useSelector((state) => ({ ...state }));
 
   return (
     <div className={styles.main}>
@@ -27,7 +26,7 @@ function SearchBar() {
         <Link href="/cart">
           <span className={styles.cart}>
             <FaOpencart />
-            <span>{cart.length}</span>
+            <span>{cart?.cartItems?.length || 0}</span>
           </span>
         </Link>
       </div>
