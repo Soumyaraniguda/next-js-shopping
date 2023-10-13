@@ -5,12 +5,23 @@ import EmptyCart from "@/components/cart/empty/EmptyCart";
 import ProductCart from "@/components/cart/product/ProductCart";
 import Footer from "@/components/footer/page";
 import styles from "@/styles/cart.module.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CartSubHeader from "@/components/cart/subHeader/CartSubHeader";
 import CartCheckout from "@/components/cart/checkout/CartCheckout";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import PaymentMethodsCart from "@/components/cart/paymentMethods/PaymentMethodsCart";
+import ProductSwiper from "@/components/productsSwiper/ProductSwiper";
+import { gamingSwiper, homeImprovSwiper, women_swiper } from "@/data/home";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { saveCart } from "@/uiApiRequests/user.api";
+import { updateCart } from "@/redux/cartSlice";
+import axios from "axios";
 
 function Cart() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { data: session } = useSession();
   const [selectedItems, setSelectedItems] = useState([]);
   const { cart } = useSelector((state) => ({ ...state }));
 
@@ -19,20 +30,53 @@ function Cart() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    const shippingFeeValue = Math.floor(
-      selectedItems.reduce((a, c) => a + c.shipping || 0, 0).toFixed(2)
+    const shippingFeeValue = selectedItems.reduce(
+      (a, c) => a + c.shipping || 0,
+      0
     );
-    setShippingFee(shippingFeeValue);
 
-    const subTotalValue = Math.floor(
-      selectedItems.reduce((a, c) => a + c.price * c.qty, 0).toFixed(2)
+    setShippingFee(shippingFeeValue.toFixed(2));
+
+    const subTotalValue = selectedItems.reduce(
+      (a, c) => a + c.price * c.qty,
+      0
     );
-    setSubTotal(subTotalValue);
 
-    setTotal(shippingFeeValue + subTotalValue);
+    setSubTotal(subTotalValue.toFixed(2));
+    const totalPrice = (shippingFeeValue + subTotalValue).toFixed(2);
+    setTotal(totalPrice);
   }, [selectedItems]);
 
-  console.log({ selectedItems, cartItems: cart.cartItems });
+  const updateCartInitiallyRef = useRef(true);
+  /**
+   * UPDATE THE CART REDUX STATE
+   * Update the cart in the redux state as soon as you land on checkout page
+   * Some times product maybe out of stock when you land on the page after a day or some time
+   * So get the latest data about the products added in the cart and then show the cart items info
+   * This should happen only once
+   */
+
+  useEffect(() => {
+    const update = async () => {
+      const { data } = await axios.post("/api/cart/update", {
+        products: cart.cartItems,
+      });
+      dispatch(updateCart(data));
+    };
+    if (cart.cartItems.length && updateCartInitiallyRef.current) {
+      updateCartInitiallyRef.current = false;
+      update();
+    }
+  }, [cart.cartItems]);
+
+  const handleSaveCartToDB = async () => {
+    if (session) {
+      const res = await saveCart(selectedItems, session.user.id);
+      // router.push("/checkout");
+    } else {
+      signIn();
+    }
+  };
 
   return (
     <>
@@ -60,11 +104,15 @@ function Cart() {
               shipppingFee={shippingFee}
               total={total}
               selectedItems={selectedItems}
+              onSaveCartToDB={handleSaveCartToDB}
             />
+            <PaymentMethodsCart />
           </div>
         ) : (
           <EmptyCart />
         )}
+        <ProductSwiper products={women_swiper} />
+        <ProductSwiper products={homeImprovSwiper} />
       </div>
       <Footer />
     </>

@@ -33,7 +33,6 @@ function ProductDetailsInfo({ product, setActiveImage }) {
     const { data } = await axios.get(
       `/api/product/get-product-to-add-in-cart/${product._id}?style=${product?.style}&size=${size}`
     );
-    console.log("data =", data);
 
     if (qty > data?.quantity) {
       setError(

@@ -1,6 +1,12 @@
 import styles from "./styles.module.scss";
 
-function CartCheckout({ subTotal, shipppingFee, total, selectedItems }) {
+function CartCheckout({
+  subTotal,
+  shipppingFee,
+  total,
+  selectedItems,
+  onSaveCartToDB,
+}) {
   return (
     <div className={`${styles.cart__checkout} ${styles.card}`}>
       <h2>Order Summary</h2>
@@ -23,6 +29,7 @@ function CartCheckout({ subTotal, shipppingFee, total, selectedItems }) {
             background: `${!selectedItems.length ? "#eee" : ""}`,
             cursor: `${!selectedItems.length ? "not-allowed" : ""}`,
           }}
+          onClick={() => onSaveCartToDB()}
         >
           Continue
         </button>

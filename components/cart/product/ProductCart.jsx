@@ -13,15 +13,31 @@ function ProductCart({ product, selectedItems, setSelectedItems }) {
   const { cart } = useSelector((state) => ({ ...state }));
 
   const handleUpdateQty = (type) => {
+    const newQty = type === "plus" ? product.qty + 1 : product.qty - 1;
     let newCart = cart.cartItems.map((item) => {
       if (item._uid === product._uid) {
         return {
           ...item,
-          qty: type === "plus" ? product.qty + 1 : product.qty - 1,
+          qty: newQty,
         };
       }
       return item;
     });
+
+    // Update the quantity to calculate the price for checkout section
+    if (selected) {
+      let newItems = [...selectedItems];
+      newItems = selectedItems.map((item) => {
+        if (item._uid === product._uid) {
+          return {
+            ...item,
+            qty: newQty,
+          };
+        }
+        return item;
+      });
+      setSelectedItems(newItems);
+    }
 
     dispatch(updateCart(newCart));
   };
