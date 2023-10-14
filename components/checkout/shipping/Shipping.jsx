@@ -7,6 +7,11 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { countries } from "@/data/countries";
 import SingularSelect from "@/components/inputs/select/SingularSelect";
 import { saveAddress } from "@/uiApiRequests/user.api";
+import Image from "next/image";
+import { FaIdCard, FaMapMarkerAlt } from "react-icons/fa";
+import { GiPhone } from "react-icons/gi";
+import { MdOutlineArrowDropUp } from "react-icons/md";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const initialShippingAddress = {
   firstName: "",
@@ -22,7 +27,7 @@ const initialShippingAddress = {
 
 function Shipping({ selectedAddress, setSelectedAddress, user }) {
   const [addresses, setAddresses] = useState(user?.address);
-
+  const [showForm, setShowForm] = useState(false);
   const [shippingAddress, setShippingAddress] = useState(
     initialShippingAddress
   );
@@ -87,100 +92,164 @@ function Shipping({ selectedAddress, setSelectedAddress, user }) {
   };
 
   useEffect(() => {
-    setAddresses(user?.address);
+    setAddresses(user?.address || []);
+    if (!user?.address?.length) {
+      setShowForm(true);
+    }
   }, [user?.address]);
   console.log({ addresses });
 
   return (
     <div className={styles.shipping}>
-      <Formik
-        enableReinitialize
-        initialValues={{
-          firstName,
-          lastName,
-          phoneNumber,
-          state,
-          city,
-          zipCode,
-          address1,
-          address2,
-          country,
-        }}
-        validationSchema={validateShippingAddress}
-        onSubmit={() => handleSaveShippingAddress()}
+      <div className={styles.addresses}>
+        {addresses?.map((address) => (
+          <div
+            className={`${styles.address} ${
+              address?.active ? styles.active : ""
+            }`}
+            key={address._id}
+          >
+            <div className={styles.address__side}>
+              <Image src={user.image} height={30} width={30} alt="User" />
+            </div>
+            <div className={styles.address__col}>
+              <span>
+                <FaIdCard />
+                {address.firstName.toUpperCase()}{" "}
+                {address.lastName.toUpperCase()}
+              </span>
+              <span>
+                <GiPhone />
+                {address.phoneNumber}
+              </span>
+            </div>
+            <div className={styles.address__col}>
+              <span>
+                <FaMapMarkerAlt />
+                {address.address1}
+              </span>
+              <span>{address.address2}</span>
+              <span>
+                {address.city}, {address.state}, {address.country}
+              </span>
+              <span>{address.zipCode}</span>
+            </div>
+            <span
+              className={styles.active__text}
+              style={{
+                display: `${address?.active ? "block" : "none"}`,
+              }}
+            >
+              Active
+            </span>
+          </div>
+        ))}
+      </div>
+      <button
+        className="styles.hide_show"
+        onClick={() => setShowForm(!showForm)}
       >
-        {(form) => (
-          <Form>
-            <SingularSelect
-              name="country"
-              value={country}
-              placeholder="*Country"
-              handleChange={handleChange}
-              data={countries}
-            />
-
-            <div className={styles.col}>
-              <ShipppingAddressInput
-                type="text"
-                name="firstName"
-                placeholder="*First name"
-                onChange={handleChange}
-              />
-              <ShipppingAddressInput
-                type="text"
-                name="lastName"
-                placeholder="*Last name"
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className={styles.col}>
-              <ShipppingAddressInput
-                type="text"
-                name="state"
-                placeholder="*State/Province"
-                onChange={handleChange}
-              />
-              <ShipppingAddressInput
-                type="text"
-                name="city"
-                placeholder="*City"
-                onChange={handleChange}
-              />
-            </div>
-
-            <ShipppingAddressInput
-              type="text"
-              name="phoneNumber"
-              placeholder="*Phone number"
-              onChange={handleChange}
-            />
-
-            <ShipppingAddressInput
-              type="text"
-              name="zipCode"
-              placeholder="*Post/Zip code"
-              onChange={handleChange}
-            />
-
-            <ShipppingAddressInput
-              type="text"
-              name="address1"
-              placeholder="*Address line 1"
-              onChange={handleChange}
-            />
-
-            <ShipppingAddressInput
-              type="text"
-              name="address2"
-              placeholder="Address line 2"
-              onChange={handleChange}
-            />
-
-            <button type="submit">Save Address</button>
-          </Form>
+        {showForm ? (
+          <span>
+            <MdOutlineArrowDropUp style={{ fontSize: "2rem", file: "#222" }} />
+          </span>
+        ) : (
+          <span>
+            ADD NEW ADDRESS <AiOutlinePlus />
+          </span>
         )}
-      </Formik>
+      </button>
+
+      {showForm && (
+        <Formik
+          enableReinitialize
+          initialValues={{
+            firstName,
+            lastName,
+            phoneNumber,
+            state,
+            city,
+            zipCode,
+            address1,
+            address2,
+            country,
+          }}
+          validationSchema={validateShippingAddress}
+          onSubmit={() => handleSaveShippingAddress()}
+        >
+          {(form) => (
+            <Form>
+              <SingularSelect
+                name="country"
+                value={country}
+                placeholder="*Country"
+                handleChange={handleChange}
+                data={countries}
+              />
+
+              <div className={styles.col}>
+                <ShipppingAddressInput
+                  type="text"
+                  name="firstName"
+                  placeholder="*First name"
+                  onChange={handleChange}
+                />
+                <ShipppingAddressInput
+                  type="text"
+                  name="lastName"
+                  placeholder="*Last name"
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className={styles.col}>
+                <ShipppingAddressInput
+                  type="text"
+                  name="state"
+                  placeholder="*State/Province"
+                  onChange={handleChange}
+                />
+                <ShipppingAddressInput
+                  type="text"
+                  name="city"
+                  placeholder="*City"
+                  onChange={handleChange}
+                />
+              </div>
+
+              <ShipppingAddressInput
+                type="text"
+                name="phoneNumber"
+                placeholder="*Phone number"
+                onChange={handleChange}
+              />
+
+              <ShipppingAddressInput
+                type="text"
+                name="zipCode"
+                placeholder="*Post/Zip code"
+                onChange={handleChange}
+              />
+
+              <ShipppingAddressInput
+                type="text"
+                name="address1"
+                placeholder="*Address line 1"
+                onChange={handleChange}
+              />
+
+              <ShipppingAddressInput
+                type="text"
+                name="address2"
+                placeholder="Address line 2"
+                onChange={handleChange}
+              />
+
+              <button type="submit">Save Address</button>
+            </Form>
+          )}
+        </Formik>
+      )}
     </div>
   );
 }
