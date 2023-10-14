@@ -10,8 +10,6 @@ export default function ShippingInput({ placeholder, ...props }) {
   const inputRef = useRef(null);
   const [move, setMove] = useState(false);
 
-  console.log({ field, meta });
-
   useEffect(() => {
     if (field.value.length > 0) {
       setMove(true);

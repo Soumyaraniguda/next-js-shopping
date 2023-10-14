@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./styles.module.scss";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import ShipppingAddressInput from "@/components/inputs/shippingAddressInput/ShipppingAddressInput";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { countries } from "@/data/countries";
+import SingularSelect from "@/components/inputs/select/SingularSelect";
+import { saveAddress } from "@/uiApiRequests/user.api";
 
 const initialShippingAddress = {
   firstName: "",
@@ -39,11 +41,11 @@ function Shipping({ selectedAddress, setSelectedAddress, user }) {
 
   const validateShippingAddress = Yup.object({
     firstName: Yup.string()
-      .required("First name is required")
+      .required("First name is required.")
       .min(3, "First name must be atleast 3 characters long.")
       .max(20, "First name must be less than 20 characters long."),
     lastName: Yup.string()
-      .required("Last name is required")
+      .required("Last name is required.")
       .min(3, "Last name must be atleast 3 characters long.")
       .max(20, "Last name must be less than 20 characters long."),
     phoneNumber: Yup.string()
@@ -69,7 +71,7 @@ function Shipping({ selectedAddress, setSelectedAddress, user }) {
     address2: Yup.string()
       .min(2, "Address line 2 should contain 5-100 characters.")
       .max(100, "Address line 2 must be less than 60 characters long."),
-    country: Yup.string().required(),
+    country: Yup.string().required("Country is required."),
   });
 
   const handleChange = (event) => {
@@ -77,9 +79,17 @@ function Shipping({ selectedAddress, setSelectedAddress, user }) {
     setShippingAddress({ ...shippingAddress, [name]: value });
   };
 
-  const handleAddShippingAddress = () => {
-    console.log("handle add shipping");
+  const handleSaveShippingAddress = async () => {
+    const res = await saveAddress(shippingAddress, user._id);
+    console.log(res);
+    setAddresses([...addresses, res]);
+    setSelectedAddress(res);
   };
+
+  useEffect(() => {
+    setAddresses(user?.address);
+  }, [user?.address]);
+  console.log({ addresses });
 
   return (
     <div className={styles.shipping}>
@@ -97,28 +107,18 @@ function Shipping({ selectedAddress, setSelectedAddress, user }) {
           country,
         }}
         validationSchema={validateShippingAddress}
-        onSubmit={() => handleAddShippingAddress()}
+        onSubmit={() => handleSaveShippingAddress()}
       >
         {(form) => (
           <Form>
-            <FormControl className={styles.selectCountry}>
-              <InputLabel id="demo-simple-select-helper-label">
-                Country
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-helper-label"
-                id="demo-simple-helper"
-                value={country}
-                name="country"
-                onChange={handleChange}
-              >
-                {countries.map((country) => (
-                  <MenuItem value={country.name} key={country.name}>
-                    {country.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <SingularSelect
+              name="country"
+              value={country}
+              placeholder="*Country"
+              handleChange={handleChange}
+              data={countries}
+            />
+
             <div className={styles.col}>
               <ShipppingAddressInput
                 type="text"
