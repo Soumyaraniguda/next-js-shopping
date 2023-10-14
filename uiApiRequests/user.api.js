@@ -11,3 +11,7 @@ export const saveCart = async (cart, user_id) => {
     return error.message;
   }
 };
+
+export const getCart = async (userId) => {
+  return await axios.get(`api/cart?userId=${userId}`);
+};

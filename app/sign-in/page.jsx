@@ -35,6 +35,8 @@ function SignIn({ params, searchParams }) {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(initialValues);
 
+  console.log({ user });
+
   // console.log({ router, params, searchParams });
 
   const {

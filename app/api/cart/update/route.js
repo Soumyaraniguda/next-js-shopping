@@ -1,7 +1,5 @@
-import Category from "@/models/Category";
 import Product from "@/models/Product";
-import SubCategory from "@/models/SubCategory";
-import User from "@/models/User";
+
 import db from "@/utils/database";
 import { NextResponse } from "next/server";
 

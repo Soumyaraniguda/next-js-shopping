@@ -11,7 +11,7 @@ import CartCheckout from "@/components/cart/checkout/CartCheckout";
 import { useEffect, useRef, useState } from "react";
 import PaymentMethodsCart from "@/components/cart/paymentMethods/PaymentMethodsCart";
 import ProductSwiper from "@/components/productsSwiper/ProductSwiper";
-import { gamingSwiper, homeImprovSwiper, women_swiper } from "@/data/home";
+import { homeImprovSwiper, women_swiper } from "@/data/home";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { saveCart } from "@/uiApiRequests/user.api";
@@ -72,7 +72,7 @@ function Cart() {
   const handleSaveCartToDB = async () => {
     if (session) {
       const res = await saveCart(selectedItems, session.user.id);
-      // router.push("/checkout");
+      router.push("/checkout");
     } else {
       signIn();
     }
