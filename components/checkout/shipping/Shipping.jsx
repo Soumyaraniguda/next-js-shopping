@@ -6,7 +6,7 @@ import ShipppingAddressInput from "@/components/inputs/shippingAddressInput/Ship
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { countries } from "@/data/countries";
 import SingularSelect from "@/components/inputs/select/SingularSelect";
-import { saveAddress } from "@/uiApiRequests/user.api";
+import { saveAddress, updateActiveAddress } from "@/uiApiRequests/user.api";
 import Image from "next/image";
 import { FaIdCard, FaMapMarkerAlt } from "react-icons/fa";
 import { GiPhone } from "react-icons/gi";
@@ -25,8 +25,7 @@ const initialShippingAddress = {
   country: "",
 };
 
-function Shipping({ selectedAddress, setSelectedAddress, user }) {
-  const [addresses, setAddresses] = useState(user?.address);
+function Shipping({ addresses, setAddresses, user }) {
   const [showForm, setShowForm] = useState(false);
   const [shippingAddress, setShippingAddress] = useState(
     initialShippingAddress
@@ -86,17 +85,25 @@ function Shipping({ selectedAddress, setSelectedAddress, user }) {
 
   const handleSaveShippingAddress = async () => {
     const res = await saveAddress(shippingAddress, user._id);
-    console.log(res);
-    setAddresses([...addresses, res]);
-    setSelectedAddress(res);
+    if (res.status === 200) {
+      setAddresses(res.data);
+    }
+  };
+
+  const updateActiveAddressHandler = async (id) => {
+    const res = await updateActiveAddress(id);
+    console.log(res.data);
+    if (res.status === 200) {
+      setAddresses(res.data);
+    }
   };
 
   useEffect(() => {
-    setAddresses(user?.address || []);
     if (!user?.address?.length) {
       setShowForm(true);
     }
   }, [user?.address]);
+
   console.log({ addresses });
 
   return (
@@ -104,19 +111,24 @@ function Shipping({ selectedAddress, setSelectedAddress, user }) {
       <div className={styles.addresses}>
         {addresses?.map((address) => (
           <div
-            className={`${styles.address} ${
-              address?.active ? styles.active : ""
-            }`}
+            className={`${styles.address} ${address.active && styles.active}`}
             key={address._id}
+            onClick={() => updateActiveAddressHandler(address._id)}
           >
             <div className={styles.address__side}>
-              <Image src={user.image} height={30} width={30} alt="User" />
+              <Image
+                src={user.image}
+                height={0}
+                width={0}
+                alt="User"
+                sizes="100vw"
+              />
             </div>
             <div className={styles.address__col}>
               <span>
                 <FaIdCard />
-                {address.firstName.toUpperCase()}{" "}
-                {address.lastName.toUpperCase()}
+                {address?.firstName?.toUpperCase()}{" "}
+                {address?.lastName?.toUpperCase()}
               </span>
               <span>
                 <GiPhone />
@@ -134,19 +146,16 @@ function Shipping({ selectedAddress, setSelectedAddress, user }) {
               </span>
               <span>{address.zipCode}</span>
             </div>
-            <span
-              className={styles.active__text}
-              style={{
-                display: `${address?.active ? "block" : "none"}`,
-              }}
-            >
-              Active
-            </span>
+            {address.active ? (
+              <span className={styles.active__text}>Active</span>
+            ) : (
+              <></>
+            )}
           </div>
         ))}
       </div>
       <button
-        className="styles.hide_show"
+        className={styles.hide_show}
         onClick={() => setShowForm(!showForm)}
       >
         {showForm ? (

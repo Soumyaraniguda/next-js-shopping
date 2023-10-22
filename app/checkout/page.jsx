@@ -1,7 +1,6 @@
 "use client";
 
 import styles from "@/styles/checkout.module.scss";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -12,7 +11,7 @@ import Shipping from "@/components/checkout/shipping/Shipping";
 function Checkout() {
   const { data: session } = useSession();
   const router = useRouter();
-  const [selectedAddress, setSelectedAddress] = useState();
+  const [addresses, setAddresses] = useState([]);
   const [checkoutData, setCheckoutData] = useState({ cart: {}, user: {} });
 
   useEffect(() => {
@@ -20,6 +19,7 @@ function Checkout() {
       getCart(session.user.id)
         .then((res) => {
           setCheckoutData(res.data);
+          setAddresses(res.data.user?.address);
         })
         .catch((error) => {
           router.push("/cart");
@@ -33,9 +33,9 @@ function Checkout() {
       <div className={`${styles.container} ${styles.checkout}`}>
         <div className={styles.checkout__side}>
           <Shipping
-            selectedAddress={selectedAddress}
-            setSelectedAddress={setSelectedAddress}
             user={checkoutData.user}
+            addresses={addresses}
+            setAddresses={setAddresses}
           />
         </div>
         <div className={styles.checkout__side}></div>

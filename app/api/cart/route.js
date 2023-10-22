@@ -2,11 +2,19 @@ import Cart from "@/models/Cart";
 import User from "@/models/User";
 import db from "@/utils/database";
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 export const GET = async (request, { params }) => {
   const url = new URL(request.url);
-  const userId = url.searchParams.get("userId");
-  console.log("userid =", userId);
+  // const userId = url.searchParams.get("userId");
+
+  const token = await getToken({
+    req: request,
+    secret: process.env.JWT_SECRET,
+    secureCookie: process.env.NODE_ENV === "production",
+  });
+  const userId = token.sub;
+
   try {
     await db.connectToDB();
     const user = await User.findById(userId);

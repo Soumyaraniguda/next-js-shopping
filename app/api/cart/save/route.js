@@ -1,10 +1,9 @@
 import Cart from "@/models/Cart";
-import Category from "@/models/Category";
 import Product from "@/models/Product";
-import SubCategory from "@/models/SubCategory";
 import User from "@/models/User";
 import db from "@/utils/database";
 import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 export const POST = async (req, res) => {
   const url = new URL(req.url);
@@ -12,7 +11,16 @@ export const POST = async (req, res) => {
   try {
     await db.connectToDB();
     let products = [];
-    const { cart, user_id } = await req.json();
+    // const { cart, user_id } = await req.json();
+
+    const { cart } = await req.json();
+
+    const token = await getToken({
+      req: request,
+      secret: process.env.JWT_SECRET,
+      secureCookie: process.env.NODE_ENV === "production",
+    });
+    const user_id = token.sub;
 
     let user = await User.findById(user_id);
     let cartAlreadyExist = await Cart.findOne({ user: user._id });

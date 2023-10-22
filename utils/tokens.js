@@ -16,3 +16,8 @@ export const verifyResetPasswordToken = (token) => {
   const validToken = jwt.verify(token, process.env.RESET_PASSWORD_TOKEN_SECRET);
   return validToken;
 };
+
+export const verifyJwtToken = (token) => {
+  const verifyToken = jwt.verify(token, process.env.JWT_SECRET);
+  return verifyToken;
+};
