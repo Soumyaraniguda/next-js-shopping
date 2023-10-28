@@ -8,15 +8,15 @@ import { getCart } from "@/uiApiRequests/user.api";
 import CartHeader from "@/components/cart/header/CartHeader";
 import Shipping from "@/components/checkout/shipping/Shipping";
 import ProductsAtCheckout from "@/components/checkout/products/ProductsAtCheckout";
-import Payment from "@/components/footer/Payment";
 import PaymentAtCheckout from "@/components/checkout/payment/PaymentAtCheckout";
+import { paymentMethods } from "@/data/paymentMethods";
 
 function Checkout() {
   const { data: session } = useSession();
   const router = useRouter();
   const [addresses, setAddresses] = useState([]);
   const [checkoutData, setCheckoutData] = useState({ cart: {}, user: {} });
-  const [paymentMethod, setPaymentMethod] = useState("");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
 
   useEffect(() => {
     if (session) {
@@ -46,8 +46,9 @@ function Checkout() {
         </div>
         <div className={styles.checkout__side}>
           <PaymentAtCheckout
-            paymentMethod={paymentMethod}
-            setPaymentMethod={setPaymentMethod}
+            paymentMethods={paymentMethods}
+            selectedPaymentMethod={selectedPaymentMethod}
+            setSelectedPaymentMethod={setSelectedPaymentMethod}
           />
         </div>
       </div>

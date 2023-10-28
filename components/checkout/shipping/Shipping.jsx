@@ -112,7 +112,7 @@ function Shipping({ addresses, setAddresses, user }) {
   return (
     <div className={styles.shipping}>
       <div className={styles.header}>
-        <h2>Shipping Addresses</h2>
+        <h3>Shipping Addresses</h3>
       </div>
       <div className={styles.addresses}>
         {addresses?.map((address) => (
