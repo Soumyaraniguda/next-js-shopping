@@ -7,18 +7,23 @@ import { useRouter } from "next/navigation";
 import { getCart } from "@/uiApiRequests/user.api";
 import CartHeader from "@/components/cart/header/CartHeader";
 import Shipping from "@/components/checkout/shipping/Shipping";
+import ProductsAtCheckout from "@/components/checkout/products/ProductsAtCheckout";
+import Payment from "@/components/footer/Payment";
+import PaymentAtCheckout from "@/components/checkout/payment/PaymentAtCheckout";
 
 function Checkout() {
   const { data: session } = useSession();
   const router = useRouter();
   const [addresses, setAddresses] = useState([]);
   const [checkoutData, setCheckoutData] = useState({ cart: {}, user: {} });
+  const [paymentMethod, setPaymentMethod] = useState("");
 
   useEffect(() => {
     if (session) {
       getCart(session.user.id)
         .then((res) => {
           setCheckoutData(res.data);
+          console.log("cart =", res.data);
           setAddresses(res.data.user?.address);
         })
         .catch((error) => {
@@ -37,8 +42,14 @@ function Checkout() {
             addresses={addresses}
             setAddresses={setAddresses}
           />
+          <ProductsAtCheckout cart={checkoutData?.cart} />
         </div>
-        <div className={styles.checkout__side}></div>
+        <div className={styles.checkout__side}>
+          <PaymentAtCheckout
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
+          />
+        </div>
       </div>
     </>
   );
