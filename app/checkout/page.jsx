@@ -10,6 +10,7 @@ import Shipping from "@/components/checkout/shipping/Shipping";
 import ProductsAtCheckout from "@/components/checkout/products/ProductsAtCheckout";
 import PaymentAtCheckout from "@/components/checkout/payment/PaymentAtCheckout";
 import { paymentMethods } from "@/data/paymentMethods";
+import SummaryAtCheckout from "@/components/checkout/summary/SummaryAtCheckout";
 
 function Checkout() {
   const { data: session } = useSession();
@@ -17,13 +18,25 @@ function Checkout() {
   const [addresses, setAddresses] = useState([]);
   const [checkoutData, setCheckoutData] = useState({ cart: {}, user: {} });
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("");
+  const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
+  const [selectedAddress, setSelectedAddress] = useState("");
 
+  // Set selected address
+  useEffect(() => {
+    if (addresses?.length) {
+      let activeAddress = addresses?.find((address) => address.active);
+      if (activeAddress) {
+        setSelectedAddress(activeAddress);
+      } else setSelectedAddress("");
+    }
+  }, [addresses]);
+
+  // Fetch the cart details
   useEffect(() => {
     if (session) {
       getCart(session.user.id)
         .then((res) => {
           setCheckoutData(res.data);
-          console.log("cart =", res.data);
           setAddresses(res.data.user?.address);
         })
         .catch((error) => {
@@ -49,6 +62,14 @@ function Checkout() {
             paymentMethods={paymentMethods}
             selectedPaymentMethod={selectedPaymentMethod}
             setSelectedPaymentMethod={setSelectedPaymentMethod}
+          />
+          <SummaryAtCheckout
+            totalAfterDiscount={totalAfterDiscount}
+            setTotalAfterDiscount={setTotalAfterDiscount}
+            user={session?.user}
+            cart={checkoutData?.cart}
+            paymentMethod={selectedPaymentMethod}
+            selectedAddress={selectedAddress}
           />
         </div>
       </div>
