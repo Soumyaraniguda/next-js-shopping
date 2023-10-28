@@ -38,3 +38,12 @@ export const updateActiveAddress = async (id) => {
     return error;
   }
 };
+
+export const deleteAddress = async (id) => {
+  try {
+    const data = await axios.delete(`/api/user/shipping-address?id=${id}`);
+    return data;
+  } catch (error) {
+    return error;
+  }
+};

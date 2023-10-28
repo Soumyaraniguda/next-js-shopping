@@ -1,6 +1,6 @@
 import User from "@/models/User";
 import db from "@/utils/database";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export const POST = async (req, res) => {
@@ -78,6 +78,52 @@ export const PUT = async (req, res) => {
     const newData = await User.findOneAndUpdate(
       { _id: user._id },
       { address: addresses },
+      { returnOriginal: false }
+    );
+
+    await db.disConnectDB();
+    return NextResponse.json(newData.address, {
+      status: 200,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: error.message,
+      },
+      {
+        status: 500,
+      }
+    );
+  } finally {
+    await db.disConnectDB();
+  }
+};
+
+export const DELETE = async (req, res) => {
+  console.log("----------------- ddd");
+  console.log("delete");
+  const url = new URL(req.url);
+  const addressId = url.searchParams.get("id");
+  try {
+    const token = await getToken({
+      req: req,
+      secret: process.env.JWT_SECRET,
+      secureCookie: process.env.NODE_ENV === "production",
+    });
+    const userId = token.sub;
+
+    await db.connectToDB();
+
+    console.log(addressId);
+
+    const newData = await User.findOneAndUpdate(
+      { _id: userId },
+
+      {
+        $pull: {
+          address: { _id: addressId },
+        },
+      },
       { returnOriginal: false }
     );
 

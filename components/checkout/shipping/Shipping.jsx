@@ -6,12 +6,17 @@ import ShipppingAddressInput from "@/components/inputs/shippingAddressInput/Ship
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { countries } from "@/data/countries";
 import SingularSelect from "@/components/inputs/select/SingularSelect";
-import { saveAddress, updateActiveAddress } from "@/uiApiRequests/user.api";
+import {
+  deleteAddress,
+  saveAddress,
+  updateActiveAddress,
+} from "@/uiApiRequests/user.api";
 import Image from "next/image";
 import { FaIdCard, FaMapMarkerAlt } from "react-icons/fa";
 import { GiPhone } from "react-icons/gi";
 import { MdOutlineArrowDropUp } from "react-icons/md";
 import { AiOutlinePlus } from "react-icons/ai";
+import { IoRemoveCircle } from "react-icons/io5";
 
 const initialShippingAddress = {
   firstName: "",
@@ -92,65 +97,73 @@ function Shipping({ addresses, setAddresses, user }) {
 
   const updateActiveAddressHandler = async (id) => {
     const res = await updateActiveAddress(id);
-    console.log(res.data);
     if (res.status === 200) {
       setAddresses(res.data);
     }
   };
 
-  useEffect(() => {
-    if (!user?.address?.length) {
-      setShowForm(true);
+  const handleDeleteAdderss = async (id) => {
+    const res = await deleteAddress(id);
+    if (res.status === 200) {
+      setAddresses(res.data);
     }
-  }, [user?.address]);
-
-  console.log({ addresses });
+  };
 
   return (
     <div className={styles.shipping}>
+      <div className={styles.header}>
+        <h2>Shipping Addresses</h2>
+      </div>
       <div className={styles.addresses}>
         {addresses?.map((address) => (
-          <div
-            className={`${styles.address} ${address.active && styles.active}`}
-            key={address._id}
-            onClick={() => updateActiveAddressHandler(address._id)}
-          >
-            <div className={styles.address__side}>
-              <Image
-                src={user.image}
-                height={0}
-                width={0}
-                alt="User"
-                sizes="100vw"
-              />
+          <div key={address._id} style={{ position: "relative" }}>
+            <div
+              className={styles.address__delete}
+              onClick={() => handleDeleteAdderss(address._id)}
+            >
+              <IoRemoveCircle />
             </div>
-            <div className={styles.address__col}>
-              <span>
-                <FaIdCard />
-                {address?.firstName?.toUpperCase()}{" "}
-                {address?.lastName?.toUpperCase()}
-              </span>
-              <span>
-                <GiPhone />
-                {address.phoneNumber}
-              </span>
+            <div
+              className={`${styles.address} ${address.active && styles.active}`}
+              onClick={() => updateActiveAddressHandler(address._id)}
+            >
+              <div className={styles.address__side}>
+                <Image
+                  src={user.image}
+                  height={0}
+                  width={0}
+                  alt="User"
+                  sizes="100vw"
+                />
+              </div>
+              <div className={styles.address__col}>
+                <span>
+                  <FaIdCard />
+                  {address?.firstName?.toUpperCase()}{" "}
+                  {address?.lastName?.toUpperCase()}
+                </span>
+                <span>
+                  <GiPhone />
+                  {address.phoneNumber}
+                </span>
+              </div>
+              <div className={styles.address__col}>
+                <span>
+                  <FaMapMarkerAlt />
+                  {address.address1}
+                </span>
+                <span>{address.address2}</span>
+                <span>
+                  {address.city}, {address.state}, {address.country}
+                </span>
+                <span>{address.zipCode}</span>
+              </div>
+              {address.active ? (
+                <span className={styles.active__text}>Active</span>
+              ) : (
+                <></>
+              )}
             </div>
-            <div className={styles.address__col}>
-              <span>
-                <FaMapMarkerAlt />
-                {address.address1}
-              </span>
-              <span>{address.address2}</span>
-              <span>
-                {address.city}, {address.state}, {address.country}
-              </span>
-              <span>{address.zipCode}</span>
-            </div>
-            {address.active ? (
-              <span className={styles.active__text}>Active</span>
-            ) : (
-              <></>
-            )}
           </div>
         ))}
       </div>
