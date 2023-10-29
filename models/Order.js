@@ -73,7 +73,7 @@ const orderSchema = new mongoose.Schema(
       status: String,
       email: String,
     },
-    total: {
+    totalCost: {
       type: Number,
       required: true,
     },
