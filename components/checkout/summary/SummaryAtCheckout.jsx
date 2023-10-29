@@ -15,6 +15,7 @@ function SummaryAtCheckout({
   selectedAddress,
 }) {
   const [coupon, setCoupon] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState("");
   const [discount, setDiscount] = useState(0);
   const [applyCouponError, setApplyCouponError] = useState("");
   const [orderError, setOrderError] = useState("");
@@ -26,10 +27,12 @@ function SummaryAtCheckout({
 
   const handleApplyCoupon = async () => {
     setApplyCouponError("");
+    setAppliedCoupon("");
     const res = await applyCoupon(coupon);
     if (res.status === 200) {
       setTotalAfterDiscount(res.data.totalAfterDiscount);
       setDiscount(res.data.discount);
+      setAppliedCoupon(coupon);
     } else {
       setApplyCouponError(res.data.message);
     }
@@ -51,8 +54,10 @@ function SummaryAtCheckout({
       paymentMethod,
       totalCost:
         totalAfterDiscount !== "" ? totalAfterDiscount : cart.cartTotal,
+      totalCostBeforeDiscount: cart.cartTotal,
+      couponApplied: appliedCoupon,
     });
-    console.log({ res });
+
     if (res.status === 200) {
       router.push(`/order/${res.data.order_id}`);
     } else {

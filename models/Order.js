@@ -77,6 +77,12 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    totalCostBeforeDiscount: {
+      type: Number,
+    },
+    couponApplied: {
+      type: String,
+    },
     shippingPrice: {
       type: Number,
       required: true,

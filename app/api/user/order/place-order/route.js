@@ -7,21 +7,32 @@ import Order from "@/models/Order";
 export const POST = async (req, res) => {
   try {
     await db.connectToDB();
-    const { products, shippingAddress, paymentMethod, totalCost } =
-      await req.json();
+    const {
+      products,
+      shippingAddress,
+      paymentMethod,
+      totalCost,
+      totalCostBeforeDiscount,
+      couponApplied,
+    } = await req.json();
+
     const token = await getToken({
       req: req,
       secret: process.env.JWT_SECRET,
       secureCookie: process.env.NODE_ENV === "production",
     });
+
     const userId = token.sub;
     const user = await User.findById(userId);
+
     const newOrder = await new Order({
       user: user._id,
       products,
       shippingAddress,
       paymentMethod,
       totalCost,
+      totalCostBeforeDiscount,
+      couponApplied,
     }).save();
 
     await db.disConnectDB();

@@ -51,7 +51,6 @@ export const deleteAddress = async (id) => {
 export const applyCoupon = async (coupon) => {
   try {
     const data = await axios.post(`/api/user/apply-coupon`, { coupon });
-    console.log("data =", data);
     return data;
   } catch (error) {
     return error.response;
@@ -60,8 +59,18 @@ export const applyCoupon = async (coupon) => {
 
 export const placeOrder = async (payload) => {
   try {
-    const data = await axios.post(`/api/user/place-order`, { ...payload });
-    console.log("data =", data);
+    const data = await axios.post(`/api/user/order/place-order`, {
+      ...payload,
+    });
+    return data;
+  } catch (error) {
+    return error.response;
+  }
+};
+
+export const getOrderDetails = async (orderId) => {
+  try {
+    const data = await axios.get(`/api/user/order/${orderId}`);
     return data;
   } catch (error) {
     return error.response;
