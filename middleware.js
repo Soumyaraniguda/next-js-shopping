@@ -5,10 +5,6 @@ export async function middleware(request) {
   const baseUrl = request.nextUrl.origin;
   const path = request.nextUrl.pathname;
 
-  // const headers = {
-  //   cookie: request.headers.get("cookie") || "",
-  // };
-
   const token = await getToken({
     req: request,
     secret: process.env.JWT_SECRET,
@@ -16,7 +12,10 @@ export async function middleware(request) {
   });
 
   if (!token) {
-    return NextResponse.redirect(new URL("/sign-in", request.url), request);
+    return NextResponse.redirect(
+      new URL(`/sign-in${path ? `?callbackUrl=${path}` : ""}`, request.url),
+      request
+    );
   }
 
   // Clone the request headers and set a new header `x-hello-from-middleware1`
