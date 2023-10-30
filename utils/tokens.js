@@ -21,3 +21,9 @@ export const verifyJwtToken = (token) => {
   const verifyToken = jwt.verify(token, process.env.JWT_SECRET);
   return verifyToken;
 };
+
+export const getPaypalKeys = () => {
+  return {
+    id: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+  };
+};

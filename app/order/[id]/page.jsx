@@ -1,17 +1,64 @@
 "use client";
 
-import Footer from "@/components/footer/page";
 import Header from "@/components/header/Header";
 import styles from "@/styles/order.module.scss";
 import { getOrderDetails } from "@/uiApiRequests/user.api";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { IoArrowForward } from "react-icons/io5";
 
+function reducer(state, action) {
+  switch (action.type) {
+    case "PAYMENT_REQUEST":
+      return { ...state, loading: true };
+    case "PAYMENT_SUCCESS":
+      return { ...state, loading: false, success: true };
+    case "PAYMENT_FAILED":
+      return { ...state, loading: false, error: action.payload };
+    case "PAYMENT_RESET":
+      return { ...state, loading: false, success: false, error: false };
+  }
+}
+
 function Order({ params }) {
+  const [{ isPending }, payPalDispatch] = usePayPalScriptReducer();
+  const [{ loading, error, success }, reducerDispatch] = useReducer(reducer, {
+    loading: true,
+    order: {},
+    error: "",
+  });
+
   const orderId = params.id;
   const [orderDetails, setOrderDetails] = useState();
 
+  function handleCreatePaypalPaymentOrder() {}
+
+  function handlePaypalPaymentApprove() {}
+
+  function handlePaypalPaymentError() {}
+
+  useEffect(() => {
+    if (!orderDetails?._id || success) {
+      reducerDispatch({ type: "PAYMENT_RESET" });
+    } else {
+      // const payPalClientId = getPaypalKeys().id;
+      // payPalDispatch({
+      //   type: "resetOptions",
+      //   value: {
+      //     "client-id": payPalClientId,
+      //     currency: "usd",
+      //   },
+      // });
+      // To make it pending as we are not doing anything and put it on pending mode until payment is in action
+      payPalDispatch({
+        type: "setLoadingStatus",
+        value: "pending",
+      });
+    }
+  }, [orderDetails, success]);
+
+  // Get order details
   useEffect(() => {
     if (orderId) {
       getOrderDetails(orderId)
@@ -194,6 +241,22 @@ function Order({ params }) {
                   <span>{orderDetails.shippingAddress.zipCode}</span>
                   <span>{orderDetails.shippingAddress.country}</span>
                 </div>
+              </div>
+
+              <div className={styles.order__payment}>
+                {orderDetails.paymentMethod === "paypal" && (
+                  <>
+                    {isPending ? (
+                      <span>loading...</span>
+                    ) : (
+                      <PayPalButtons
+                        createOrder={handleCreatePaypalPaymentOrder}
+                        onApprove={handlePaypalPaymentApprove}
+                        onError={handlePaypalPaymentError}
+                      ></PayPalButtons>
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
