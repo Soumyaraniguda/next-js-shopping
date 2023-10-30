@@ -27,7 +27,7 @@ export const PUT = async (request, { params }) => {
       },
     });
 
-    console.log(paymentData);
+    // console.log(paymentData);
 
     if (orderDetails) {
       // Update the order details in database

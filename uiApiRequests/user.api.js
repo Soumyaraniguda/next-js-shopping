@@ -92,3 +92,14 @@ export const updateOrderPayWithStripe = async ({
     return error.response;
   }
 };
+
+export const updateOrderPayWithPaypal = async ({ details, orderId }) => {
+  try {
+    const data = await axios.put(`/api/user/order/${orderId}/pay-with-paypal`, {
+      details,
+    });
+    return data;
+  } catch (error) {
+    return error.response;
+  }
+};
