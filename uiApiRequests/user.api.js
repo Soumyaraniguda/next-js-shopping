@@ -76,3 +76,19 @@ export const getOrderDetails = async (orderId) => {
     return error.response;
   }
 };
+
+export const updateOrderPayWithStripe = async ({
+  amount,
+  paymentId,
+  orderId,
+}) => {
+  try {
+    const data = await axios.put(`/api/user/order/${orderId}/pay-with-stripe`, {
+      amount,
+      paymentId,
+    });
+    return data;
+  } catch (error) {
+    return error.response;
+  }
+};

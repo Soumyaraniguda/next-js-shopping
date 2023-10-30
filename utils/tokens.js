@@ -27,3 +27,9 @@ export const getPaypalKeys = () => {
     id: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
   };
 };
+
+export const getStripeKeys = () => {
+  return {
+    id: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
+  };
+};

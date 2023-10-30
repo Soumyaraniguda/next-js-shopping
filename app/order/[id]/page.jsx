@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "@/components/header/Header";
+import StripePayment from "@/components/payment/StripePayment/StripePayment";
 import styles from "@/styles/order.module.scss";
 import { getOrderDetails } from "@/uiApiRequests/user.api";
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
@@ -244,16 +245,29 @@ function Order({ params }) {
               </div>
 
               <div className={styles.order__payment}>
-                {orderDetails.paymentMethod === "paypal" && (
+                {orderDetails.isPaid ? (
+                  <>Payment successful</>
+                ) : (
                   <>
-                    {isPending ? (
-                      <span>loading...</span>
-                    ) : (
-                      <PayPalButtons
-                        createOrder={handleCreatePaypalPaymentOrder}
-                        onApprove={handlePaypalPaymentApprove}
-                        onError={handlePaypalPaymentError}
-                      ></PayPalButtons>
+                    {orderDetails.paymentMethod === "paypal" && (
+                      <>
+                        {isPending ? (
+                          <span>loading...</span>
+                        ) : (
+                          <PayPalButtons
+                            createOrder={handleCreatePaypalPaymentOrder}
+                            onApprove={handlePaypalPaymentApprove}
+                            onError={handlePaypalPaymentError}
+                          ></PayPalButtons>
+                        )}
+                      </>
+                    )}
+
+                    {orderDetails.paymentMethod === "credit_card" && (
+                      <StripePayment
+                        totalCost={orderDetails?.totalCost}
+                        orderId={orderDetails?._id}
+                      />
                     )}
                   </>
                 )}
