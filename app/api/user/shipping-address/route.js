@@ -100,8 +100,6 @@ export const PUT = async (req, res) => {
 };
 
 export const DELETE = async (req, res) => {
-  console.log("----------------- ddd");
-  console.log("delete");
   const url = new URL(req.url);
   const addressId = url.searchParams.get("id");
   try {

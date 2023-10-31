@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const path = require("path");
 const nextConfig = {
+  // experimental: { serverActions: true },
   // Import "base.scss" file in every scss file
   sassOptions: {
     includePaths: [path.join(__dirname, "styles")],
