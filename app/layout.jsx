@@ -6,6 +6,8 @@ import { ReduxProvider } from "@/redux/provider";
 import { NextAuthProvider } from "@/providers/NextAuthProviders";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import { getPaypalKeys } from "@/utils/tokens";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +34,18 @@ export default function RootLayout({ children }) {
         <NextAuthProvider>
           <ReduxProvider>
             <PayPalScriptProvider options={payPalInitialOptions}>
+              <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+              />
               {children}
             </PayPalScriptProvider>
           </ReduxProvider>
