@@ -13,15 +13,19 @@ import Categories from "@/components/home/categories/Categories";
 import ProductSwiper from "@/components/productsSwiper/ProductSwiper";
 import { gamingSwiper, homeImprovSwiper, women_swiper } from "@/data/home";
 import ProductCard from "@/components/productCard/ProductCard";
+import { useSelector } from "react-redux";
 
 export default function Home() {
   const dispatch = useDispatch();
   const { data: session } = useSession();
   const [products, setProducts] = useState();
 
-  console.log({ session });
-
   const [browserLocation, setBrowserLocation] = useState({});
+
+  const { adminSideNavExpand } = useSelector((state) => ({ ...state }));
+  const showSideNav = adminSideNavExpand?.expand;
+
+  console.log({ showSideNav, adminSideNavExpand });
 
   useEffect(() => {
     // axios.get("/api/browser-location").then((response) => {
@@ -38,7 +42,6 @@ export default function Home() {
 
   useEffect(() => {
     axios.get("/api/product").then((response) => {
-      console.log(response.data?.data);
       setProducts(response.data?.data);
     });
   }, []);

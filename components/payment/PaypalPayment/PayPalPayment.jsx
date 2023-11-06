@@ -49,7 +49,7 @@ function PayPalPayment({ orderDetails }) {
           details,
         });
 
-        console.log("data =", res.data);
+        // console.log("data =", res.data);
         reducerDispatch({ type: "PAYMENT_SUCCESS", payload: res.data });
         window.location.reload(false);
       } catch (error) {

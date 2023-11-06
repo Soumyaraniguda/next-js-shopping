@@ -23,7 +23,7 @@ function ProductDetailsInfo({ product, setActiveImage }) {
   const [error, setError] = useState("");
   const { cart } = useSelector((state) => ({ ...state }));
 
-  console.log({ productSize });
+  // console.log({ productSize });
 
   const handleAddToCart = async () => {
     if (!size) {
@@ -43,7 +43,7 @@ function ProductDetailsInfo({ product, setActiveImage }) {
     } else {
       let _uid = `${data._id}_${product.style}_${size}`;
       let itemExistInCart = cart.cartItems?.find((p) => p._uid === _uid);
-      console.log({ cartItems: cart?.cartItems, itemExistInCart });
+      // console.log({ cartItems: cart?.cartItems, itemExistInCart });
 
       if (itemExistInCart) {
         let newCart = cart.cartItems?.map((p) => {

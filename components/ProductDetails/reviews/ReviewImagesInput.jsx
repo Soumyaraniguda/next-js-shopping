@@ -11,7 +11,6 @@ function ReviewImageInput({ images, setImages }) {
     let files = Array.from(e.target.files);
 
     files.forEach((img, i) => {
-      console.log("indesx =", i);
       if (images.length === 3 || i == 2) {
         setError("Maximum 3 images are allowed.");
         return true;

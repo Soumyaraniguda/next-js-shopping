@@ -120,25 +120,33 @@ const uploadToCloudinaryHandler = async (buffer) => {
 export const DELETE = async (request) => {
   const url = new URL(request.url);
   const imageId = url.searchParams.get("id");
-  cloudinary.uploader.destroy(imageId, (error, response) => {
-    if (error) {
-      return NextResponse.json(
-        {
-          message: error,
-        },
-        {
-          status: 500,
-        }
-      );
-    }
-
+  try {
+    const response = await deleteFilesInCloudinary(imageId);
+    return NextResponse.json(response, {
+      status: 200,
+    });
+  } catch (error) {
     return NextResponse.json(
       {
-        success: true,
+        message: error.message,
       },
       {
-        status: 200,
+        status: 500,
       }
     );
+  }
+};
+
+// Upload image with buffer in cloudinary
+// https://support.cloudinary.com/hc/en-us/community/posts/360007581379-Correct-way-of-uploading-from-buffer-
+const deleteFilesInCloudinary = async (imageId) => {
+  return new Promise((resolve, reject) => {
+    cloudinary.uploader.destroy(imageId, (error, result) => {
+      if (result) {
+        resolve(result);
+      } else {
+        reject(error);
+      }
+    });
   });
 };

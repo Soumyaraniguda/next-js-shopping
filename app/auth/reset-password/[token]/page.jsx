@@ -80,7 +80,6 @@ function ResetPassword({ params }) {
         })
         .catch((error) => {
           setUserId("");
-          console.log({ error });
         });
     }
   }, [params.token, session]);

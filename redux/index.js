@@ -4,8 +4,9 @@ import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import cart from "./cartSlice";
+import adminSideNavExpand from "./adminSideNavExpandSlice";
 
-const reducers = combineReducers({ cart });
+const reducers = combineReducers({ cart, adminSideNavExpand });
 
 const config = {
   key: "root",

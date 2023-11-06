@@ -25,6 +25,7 @@ const payPalInitialOptions = {
 };
 
 export default function RootLayout({ children }) {
+  console.log("root component");
   return (
     <html lang="en">
       <body suppressHydrationWarning={true} className={inter.className}>

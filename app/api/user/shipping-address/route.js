@@ -112,8 +112,6 @@ export const DELETE = async (req, res) => {
 
     await db.connectToDB();
 
-    console.log(addressId);
-
     const newData = await User.findOneAndUpdate(
       { _id: userId },
 
