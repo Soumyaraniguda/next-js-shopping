@@ -66,7 +66,10 @@ function SignIn({ params, searchParams }) {
   const registerValidation = Yup.object({
     name: Yup.string()
       .required("Name is required")
-      .matches(/^[aA-zZ]/, "Numbers and special characters are not allowed"),
+      .matches(
+        /^[A-Za-z\s]*$/,
+        "Numbers and special characters are not allowed"
+      ),
 
     email: Yup.string()
       .required("Email is required")

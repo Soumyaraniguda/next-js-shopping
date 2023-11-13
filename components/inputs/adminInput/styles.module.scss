@@ -1,0 +1,54 @@
+.adminInputLabel {
+  span {
+    display: block;
+  }
+}
+
+.adminInput {
+  position: relative;
+  min-width: 380px;
+  width: 100%;
+  margin-top: 5px;
+  height: 45px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  input,
+  textarea {
+    border: none;
+    background: none;
+    outline: none;
+    line-height: 1;
+    font-weight: 600;
+    width: 100%;
+    color: #333;
+    &::placeholder {
+      color: #aaa;
+      font-weight: 500;
+    }
+  }
+}
+
+.hideBorder {
+  border: none !important;
+}
+
+.noPadding {
+  padding: 0 !important;
+}
+
+.error {
+  border: 1px solid $error-color;
+  margin-bottom: 2rem !important;
+}
+
+.error__message {
+  font-size: small;
+  width: 100%;
+  position: absolute;
+  margin-top: 80px;
+  color: $error-color;
+}
