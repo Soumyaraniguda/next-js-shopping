@@ -32,6 +32,7 @@ function CategoryListItem({ category, setCategories }) {
   const handleSubmit = () => {
     updateCategory({ id: category._id, name: inputValue })
       .then((response) => {
+        console.log({ response });
         setCategories(response.data.categories);
         toast.success(response.data.message);
       })
@@ -40,7 +41,7 @@ function CategoryListItem({ category, setCategories }) {
           const { data } = error.response;
           toast.error(data.message);
         } else {
-          toast.error("Operation failed");
+          toast.error("Category not updated");
         }
       });
     setEditMode(false);
@@ -63,7 +64,7 @@ function CategoryListItem({ category, setCategories }) {
           const { data } = error.response;
           toast.error(data.message);
         } else {
-          toast.error("Operation failed");
+          toast.error("Delete failed");
         }
       });
   };

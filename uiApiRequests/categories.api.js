@@ -9,7 +9,7 @@ export const addCategory = async (name) => {
 };
 
 export const updateCategory = async (data) => {
-  await axios.put("/api/categories", {
+  return await axios.put("/api/categories", {
     id: data.id,
     name: data.name,
   });

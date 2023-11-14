@@ -119,13 +119,17 @@ export const PUT = async (request) => {
       );
     }
 
-    const updateCategories = await Category.findOneAndUpdate(
-      { _id: id },
-      { name },
-      { returnOriginal: false }
-    )
+    await Category.findByIdAndUpdate(id, { name });
+    const updateCategories = await Category.find({})
       .sort({ updatedAt: -1 })
       .lean();
+    // const updateCategories = await Category.findOneAndUpdate(
+    //   { _id: id },
+    //   { name },
+    //   { returnOriginal: false }
+    // )
+    //   .sort({ updatedAt: -1 })
+    //   .lean();
 
     db.disConnectDB();
     return NextResponse.json(
@@ -138,6 +142,7 @@ export const PUT = async (request) => {
       }
     );
   } catch (error) {
+    console.log(error);
     db.disConnectDB();
     return NextResponse.json(
       {
