@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 
 function DashboardCategories() {
   const [categories, setCategories] = useState([]);
-  // console.log(categories);
 
   useEffect(() => {
     getCategories()

@@ -12,7 +12,11 @@ export default function SingularSelect({
 }) {
   const [field, meta] = useField(rest);
   return (
-    <div style={{ marginBottom: "1rem" }}>
+    <div
+      style={{
+        marginBottom: "1rem",
+      }}
+    >
       {header && (
         <div
           className={`${styles.header} ${

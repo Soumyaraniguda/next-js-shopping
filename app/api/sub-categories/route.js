@@ -1,24 +1,27 @@
 import Category from "@/models/Category";
+import SubCategory from "@/models/SubCategory";
+import { createSlug } from "@/utils/data";
 import db from "@/utils/database";
-import { NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
 import {
+  UNAUTHORIZED_STATUS,
   ACCESS_DENIED_STATUS,
-  CONFLICT_STATUS,
   CREATE_AND_RETURN_OK_STATUS,
   INTERNAL_SERVER_ERROR_STATUS,
   NOT_FOUND,
-  UNAUTHORIZED_STATUS,
 } from "@/utils/statusCodes";
-import { createSlug } from "@/utils/data";
+import { getToken } from "next-auth/jwt";
+import { NextResponse } from "next/server";
 
 export const GET = async (request, { params }) => {
   try {
     db.connectToDB();
-    const categories = await Category.find({}).sort({ updatedAt: -1 }).lean();
+    const subCategories = await SubCategory.find({})
+      .populate({ path: "parent", model: Category })
+      .sort({ updatedAt: -1 })
+      .lean();
     db.disConnectDB();
     return NextResponse.json(
-      { categories },
+      { subCategories },
       { status: CREATE_AND_RETURN_OK_STATUS }
     );
   } catch (error) {
@@ -52,23 +55,29 @@ export const POST = async (request, response) => {
       );
     }
 
-    const { name } = await request.json();
-    const alreadyExist = await Category.findOne({ name });
+    const { name, parentCategory } = await request.json();
+    const alreadyExist = await SubCategory.findOne({ name });
     // Already exist
     if (alreadyExist) {
       return NextResponse.json(
-        { message: "Category already exist. Try a different name." },
+        { message: "Sub-category already exist. Try a different name." },
         { status: CONFLICT_STATUS }
       );
     }
 
     const slug = createSlug(name);
-    await new Category({ name, slug }).save();
-    const categories = await Category.find({}).sort({ updatedAt: -1 }).lean();
+    await new SubCategory({ name, parent: parentCategory, slug }).save();
+    const subCategories = await SubCategory.find({})
+      .populate({ path: "parent", model: Category })
+      .sort({ updatedAt: -1 })
+      .lean();
 
     db.disConnectDB();
     return NextResponse.json(
-      { message: `Category "${name}" created successfully.`, categories },
+      {
+        message: `Sub-category "${name}" created successfully.`,
+        subCategories,
+      },
       {
         status: CREATE_AND_RETURN_OK_STATUS,
       }
@@ -108,40 +117,33 @@ export const PUT = async (request) => {
       );
     }
 
-    const { id, name } = await request.json();
-    const category = await Category.findById(id);
-    // Category not found
-    if (!category) {
+    const { id, name, parent } = await request.json();
+    const subCategory = await SubCategory.findById(id);
+    // Sub-category not found
+    if (!subCategory) {
       return NextResponse.json(
-        { message: "Category not found." },
+        { message: "Sub-category not found." },
         { status: NOT_FOUND }
       );
     }
 
-    await Category.findByIdAndUpdate(id, { name });
-    const updateCategories = await Category.find({})
+    await SubCategory.findByIdAndUpdate(id, { name, parent });
+    const updateSubCategories = await SubCategory.find({})
+      .populate({ path: "parent", model: Category })
       .sort({ updatedAt: -1 })
       .lean();
-    // const updateCategories = await Category.findOneAndUpdate(
-    //   { _id: id },
-    //   { name },
-    //   { returnOriginal: false }
-    // )
-    //   .sort({ updatedAt: -1 })
-    //   .lean();
 
     db.disConnectDB();
     return NextResponse.json(
       {
-        message: `Category updated successfully.`,
-        categories: updateCategories,
+        message: `Sub-category updated successfully.`,
+        subCategories: updateSubCategories,
       },
       {
         status: CREATE_AND_RETURN_OK_STATUS,
       }
     );
   } catch (error) {
-    console.log(error);
     db.disConnectDB();
     return NextResponse.json(
       {
@@ -156,8 +158,8 @@ export const PUT = async (request) => {
 
 export const DELETE = async (request) => {
   const url = new URL(request.url);
-  const categoryId = url.searchParams.get("id");
-  console.log("categoryId =", categoryId);
+  const subCategoryId = url.searchParams.get("id");
+
   try {
     db.connectToDB();
     // Check the user
@@ -179,12 +181,15 @@ export const DELETE = async (request) => {
     }
 
     // Delete category
-    await Category.findByIdAndRemove(categoryId);
-    const categories = await Category.find({}).sort({ updatedAt: -1 }).lean();
+    await SubCategory.findByIdAndRemove(subCategoryId);
+    const subCategories = await SubCategory.find({})
+      .populate({ path: "parent", model: Category })
+      .sort({ updatedAt: -1 })
+      .lean();
     db.disConnectDB();
 
     return NextResponse.json(
-      { message: `Category deleted successfully.`, categories },
+      { message: `Sub-category deleted successfully.`, subCategories },
       {
         status: CREATE_AND_RETURN_OK_STATUS,
       }

@@ -10,7 +10,7 @@ function AdminDashboard() {
       className={styles.header}
       onClick={() => toast.success("Everything is okay")}
     >
-      aaaaa
+      Dashboard
     </div>
   );
 }

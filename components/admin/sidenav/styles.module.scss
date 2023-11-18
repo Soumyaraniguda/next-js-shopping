@@ -80,7 +80,7 @@
       margin-bottom: 10px;
       cursor: pointer;
       &:hover {
-        background: $blue-color;
+        background: lighten($blue-color, 10%);
         color: #fff;
         font-weight: 600;
         svg {

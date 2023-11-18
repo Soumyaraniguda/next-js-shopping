@@ -19,6 +19,28 @@ export const deleteCategory = async (id) => {
   return await axios.delete(`/api/categories?id=${id}`);
 };
 
+// Sub-categories
+
+export const getSubCategories = async () => {
+  return await axios.get(`/api/sub-categories`);
+};
+
+export const addSubCategory = async (name, parentCategory) => {
+  return await axios.post(`/api/sub-categories`, { name, parentCategory });
+};
+
+export const updateSubCategory = async (data) => {
+  return await axios.put("/api/sub-categories", {
+    id: data.id,
+    name: data.subCategoryName,
+    parent: data.subCategoryParent,
+  });
+};
+
+export const deleteSubCategory = async (id) => {
+  return await axios.delete(`/api/sub-categories?id=${id}`);
+};
+
 // Better way to handle API error with Promise catch method*.
 
 // axios.get(people)
