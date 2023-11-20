@@ -1,19 +1,24 @@
 "use client";
 
 import CreateSubCategory from "@/components/admin/subCategories/CreateSubCategory";
+import SubCategoriesTable from "@/components/admin/subCategories/SubCategoriesTable";
+import SubCategoryFormDialog from "@/components/admin/subCategories/SubCategoryFormDialog";
 import SubCategoryList from "@/components/admin/subCategories/SubCategoryList";
-
 import {
   getCategories,
   getSubCategories,
 } from "@/uiApiRequests/categories.api";
+import { Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 function DashboardSubCategories() {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
+  const [openFormDialog, setOpenFormDialog] = useState(false);
 
-  console.log(subCategories);
+  const handleCreateSubCategory = () => {
+    setOpenFormDialog(true);
+  };
 
   useEffect(() => {
     getSubCategories()
@@ -37,7 +42,22 @@ function DashboardSubCategories() {
 
   return (
     <div>
-      <CreateSubCategory
+      <Typography variant="h5">Sub-categories</Typography>
+      <>
+        {openFormDialog && (
+          <SubCategoryFormDialog
+            openFormDialog={openFormDialog}
+            onCloseFormDialog={setOpenFormDialog}
+            categories={categories}
+            setSubCategories={setSubCategories}
+          />
+        )}
+        <SubCategoriesTable
+          subCategories={subCategories}
+          onCreateSubCategory={handleCreateSubCategory}
+        />
+      </>
+      {/* <CreateSubCategory
         setSubCategories={setSubCategories}
         categories={categories}
       />
@@ -45,7 +65,7 @@ function DashboardSubCategories() {
         subCategories={subCategories}
         setSubCategories={setSubCategories}
         categories={categories}
-      />
+      /> */}
     </div>
   );
 }
