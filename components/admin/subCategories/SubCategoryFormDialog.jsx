@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
@@ -30,9 +30,10 @@ function SubCategoryFormDialog({
   onCloseFormDialog,
   categories,
   setSubCategories,
+  subCategoryDetails,
 }) {
   const handleClose = () => {
-    onCloseFormDialog(false);
+    onCloseFormDialog();
   };
 
   const [subCategoryName, setSubCategoryName] = useState("");
@@ -72,6 +73,13 @@ function SubCategoryFormDialog({
       });
   };
 
+  useEffect(() => {
+    if (subCategoryDetails) {
+      setSubCategoryName(subCategoryDetails.name);
+      setSubCategoryParent(subCategoryDetails.parent._id);
+    }
+  }, [subCategoryDetails]);
+
   return (
     <React.Fragment>
       <BootstrapDialog
@@ -87,7 +95,9 @@ function SubCategoryFormDialog({
           m={1}
         >
           <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-            Create a Sub-category
+            {subCategoryDetails?._id
+              ? "Sub-cateogry details"
+              : "Create a Sub-category"}
           </DialogTitle>
 
           <IconButton aria-label="close" onClick={handleClose}>

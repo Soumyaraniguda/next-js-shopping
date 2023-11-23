@@ -27,17 +27,22 @@ function TableHeader(props) {
 
   return (
     <TableHead style={{ background: "#e1dddd" }}>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            color="primary"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
+      <TableRow style={{ height: 50 }}>
+        <TableCell style={{ width: "4em" }} padding="checkbox">
+          {numSelected > 0 ? (
+            <Checkbox
+              style={{ width: "2em" }}
+              color="primary"
+              indeterminate={numSelected > 0 && numSelected < rowCount}
+              checked={rowCount > 0 && numSelected === rowCount}
+              onChange={onSelectAllClick}
+              inputProps={{
+                "aria-label": "select all desserts",
+              }}
+            />
+          ) : (
+            <></>
+          )}
         </TableCell>
         {tableColumns.map((headCell) => (
           <TableCell
@@ -60,6 +65,7 @@ function TableHeader(props) {
             </TableSortLabel>
           </TableCell>
         ))}
+        <TableCell></TableCell>
       </TableRow>
     </TableHead>
   );

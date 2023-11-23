@@ -1,23 +1,50 @@
 "use client";
 
-import CreateSubCategory from "@/components/admin/subCategories/CreateSubCategory";
 import SubCategoriesTable from "@/components/admin/subCategories/SubCategoriesTable";
 import SubCategoryFormDialog from "@/components/admin/subCategories/SubCategoryFormDialog";
-import SubCategoryList from "@/components/admin/subCategories/SubCategoryList";
 import {
+  deleteSubCategory,
   getCategories,
   getSubCategories,
 } from "@/uiApiRequests/categories.api";
 import { Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 function DashboardSubCategories() {
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [openFormDialog, setOpenFormDialog] = useState(false);
+  const [subCategoryDetails, setSubCategoryDetails] = useState();
 
   const handleCreateSubCategory = () => {
     setOpenFormDialog(true);
+  };
+
+  const handleSelectDetails = (event, subCategory) => {
+    setOpenFormDialog(true);
+    setSubCategoryDetails(subCategory);
+  };
+
+  const handleDeleteSubCategory = (subCategory) => {
+    deleteSubCategory(subCategory._id)
+      .then((response) => {
+        setSubCategories(response.data.subCategories);
+        toast.success(response.data.message);
+      })
+      .catch((error) => {
+        if (error.response) {
+          const { data } = error.response;
+          toast.error(data.message);
+        } else {
+          toast.error("Delete failed");
+        }
+      });
+  };
+
+  const handleCloseFormDialog = () => {
+    setOpenFormDialog(false);
+    setSubCategoryDetails(null);
   };
 
   useEffect(() => {
@@ -47,25 +74,19 @@ function DashboardSubCategories() {
         {openFormDialog && (
           <SubCategoryFormDialog
             openFormDialog={openFormDialog}
-            onCloseFormDialog={setOpenFormDialog}
+            onCloseFormDialog={handleCloseFormDialog}
             categories={categories}
             setSubCategories={setSubCategories}
+            subCategoryDetails={subCategoryDetails}
           />
         )}
         <SubCategoriesTable
           subCategories={subCategories}
           onCreateSubCategory={handleCreateSubCategory}
+          onSelectDetails={handleSelectDetails}
+          onDeleteSubCategory={handleDeleteSubCategory}
         />
       </>
-      {/* <CreateSubCategory
-        setSubCategories={setSubCategories}
-        categories={categories}
-      />
-      <SubCategoryList
-        subCategories={subCategories}
-        setSubCategories={setSubCategories}
-        categories={categories}
-      /> */}
     </div>
   );
 }

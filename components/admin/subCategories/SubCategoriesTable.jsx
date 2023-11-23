@@ -1,18 +1,13 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Checkbox from "@mui/material/Checkbox";
-
 import { getSubCategoriesTableColumns } from "@/utils/table";
 import Pagination from "@/components/table/Pagination";
 import TableToolbar from "@/components/table/TableToolbar";
 import TableHeader from "@/components/table/TableHeader";
+import SubCategoriesTableBody from "./SubCategoriesTableBody";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -46,7 +41,12 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function SubCategoriesTable({ subCategories, onCreateSubCategory }) {
+function SubCategoriesTable({
+  subCategories,
+  onCreateSubCategory,
+  onSelectDetails,
+  onDeleteSubCategory,
+}) {
   const rows = subCategories;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
@@ -64,7 +64,7 @@ function SubCategoriesTable({ subCategories, onCreateSubCategory }) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = rows.map((r) => r._id);
       setSelected(newSelected);
       return;
     }
@@ -72,6 +72,7 @@ function SubCategoriesTable({ subCategories, onCreateSubCategory }) {
   };
 
   const handleClick = (event, id) => {
+    event.preventDefault();
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -89,8 +90,6 @@ function SubCategoriesTable({ subCategories, onCreateSubCategory }) {
     }
     setSelected(newSelected);
   };
-
-  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -113,7 +112,11 @@ function SubCategoriesTable({ subCategories, onCreateSubCategory }) {
       />
       <Paper sx={{ width: "100%", mb: 2 }}>
         <TableContainer>
-          <Table sx={{ minWidth: 750 }} aria-labelledby="tableTitle">
+          <Table
+            sx={{ minWidth: 750 }}
+            size="small"
+            aria-labelledby="tableTitle"
+          >
             <TableHeader
               numSelected={selected.length}
               order={order}
@@ -123,55 +126,18 @@ function SubCategoriesTable({ subCategories, onCreateSubCategory }) {
               rowCount={rows.length}
               tableColumns={tableColumns}
             />
-            <TableBody>
-              {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row._id);
-                const labelId = `enhanced-table-checkbox-${index}`;
 
-                return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row._id)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row._id}
-                    selected={isItemSelected}
-                    sx={{ cursor: "pointer" }}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                          "aria-labelledby": labelId,
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell
-                      component="th"
-                      id={labelId}
-                      scope="row"
-                      padding="none"
-                    >
-                      {row.name}
-                    </TableCell>
-                    <TableCell>{row.parent.name}</TableCell>
-                  </TableRow>
-                );
-              })}
-              {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: 53 * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )}
-            </TableBody>
+            <SubCategoriesTableBody
+              visibleRows={visibleRows}
+              emptyRows={emptyRows}
+              selected={selected}
+              onSelect={handleClick}
+              onSelectDetails={onSelectDetails}
+              onDeleteSubCategory={onDeleteSubCategory}
+            />
           </Table>
         </TableContainer>
+
         <Pagination
           onSetPage={setPage}
           onSetRowsPerPage={setRowsPerPage}
