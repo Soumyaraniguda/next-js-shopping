@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Box } from "@mui/material";
 
-function TableToolbar({ numSelected, onCreateSubCategory }) {
+function TableToolbar({ numSelected, onCreateEntity }) {
   return (
     <Toolbar
       style={{ paddingLeft: numSelected > 0 ? "16px" : "0", paddingRight: 0 }}
@@ -59,11 +59,7 @@ function TableToolbar({ numSelected, onCreateSubCategory }) {
           </Tooltip>
         ) : (
           <div>
-            <Button
-              variant="contained"
-              size="small"
-              onClick={onCreateSubCategory}
-            >
+            <Button variant="contained" size="small" onClick={onCreateEntity}>
               Create
             </Button>
           </div>

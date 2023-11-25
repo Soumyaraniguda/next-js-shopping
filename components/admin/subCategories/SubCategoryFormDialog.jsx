@@ -4,16 +4,17 @@ import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import { MdClose } from "react-icons/md";
-import styles from "./styles.module.scss";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import SingularSelect from "@/components/inputs/select/SingularSelect";
 import AdminInput from "@/components/inputs/adminInput/AdminInput";
 import { Box } from "@mui/material";
-import { addSubCategory } from "@/uiApiRequests/categories.api";
+import {
+  addSubCategory,
+  updateSubCategory,
+} from "@/uiApiRequests/categories.api";
 import { toast } from "react-toastify";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -54,24 +55,50 @@ function SubCategoryFormDialog({
   });
 
   const handleSubmit = () => {
-    addSubCategory(subCategoryName, subCategoryParent)
-      .then((response) => {
-        setSubCategories(response.data.subCategories);
-        toast.success(response.data.message);
-        setSubCategoryName("");
-        setSubCategoryParent("");
-        handleClose();
+    if (subCategoryDetails._id) {
+      updateSubCategory({
+        id: subCategoryDetails._id,
+        subCategoryName,
+        subCategoryParent,
       })
-      .catch((error) => {
-        console.log(error);
-        if (error.response) {
-          const { data } = error.response;
-          toast.error(data.message);
-        } else {
-          toast.error("Cannot add a Sub-category");
-        }
-      });
+        .then((response) => {
+          setSubCategories(response.data.subCategories);
+          toast.success(response.data.message);
+          setSubCategoryName("");
+          setSubCategoryParent("");
+          handleClose();
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response) {
+            const { data } = error.response;
+            toast.error(data.message);
+          } else {
+            toast.error("Cannot update a Sub-category");
+          }
+        });
+    } else {
+      addSubCategory(subCategoryName, subCategoryParent)
+        .then((response) => {
+          setSubCategories(response.data.subCategories);
+          toast.success(response.data.message);
+          setSubCategoryName("");
+          setSubCategoryParent("");
+          handleClose();
+        })
+        .catch((error) => {
+          console.log(error);
+          if (error.response) {
+            const { data } = error.response;
+            toast.error(data.message);
+          } else {
+            toast.error("Cannot add a Sub-category");
+          }
+        });
+    }
   };
+
+  console.log({ subCategoryName, subCategoryParent });
 
   useEffect(() => {
     if (subCategoryDetails) {

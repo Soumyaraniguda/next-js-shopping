@@ -1,31 +1,47 @@
-import Category from "@/models/Category";
-import SubCategory from "@/models/SubCategory";
-import { createSlug } from "@/utils/data";
+import Coupon from "@/models/Coupon";
 import db from "@/utils/database";
 import {
+  INTERNAL_SERVER_ERROR_STATUS,
   UNAUTHORIZED_STATUS,
   ACCESS_DENIED_STATUS,
   CREATE_AND_RETURN_OK_STATUS,
-  INTERNAL_SERVER_ERROR_STATUS,
-  NOT_FOUND,
 } from "@/utils/statusCodes";
 import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
-export const GET = async (request, { params }) => {
+export const GET = async (request, response) => {
   try {
-    db.connectToDB();
-    const subCategories = await SubCategory.find({})
-      .populate({ path: "parent", model: Category })
-      .sort({ updatedAt: -1 })
-      .lean();
+    await db.connectToDB();
+
+    // Check the user
+    const token = await getToken({
+      req: request,
+      secret: process.env.JWT_SECRET,
+      secureCookie: process.env.NODE_ENV === "production",
+    });
+
+    if (!token) {
+      return NextResponse.json(
+        { message: "User not found." },
+        { status: UNAUTHORIZED_STATUS }
+      );
+    } else if (token.role !== "admin") {
+      return NextResponse.json(
+        { message: "Access denied." },
+        { status: ACCESS_DENIED_STATUS }
+      );
+    }
+
+    const coupons = await Coupon.find({}).sort({ updatedAt: -1 });
+
     db.disConnectDB();
     return NextResponse.json(
-      { subCategories },
+      {
+        coupons,
+      },
       { status: CREATE_AND_RETURN_OK_STATUS }
     );
   } catch (error) {
-    db.disConnectDB();
     return NextResponse.json(
       { error },
       { status: INTERNAL_SERVER_ERROR_STATUS }
@@ -33,9 +49,9 @@ export const GET = async (request, { params }) => {
   }
 };
 
-export const POST = async (request, response) => {
+export const POST = async (request, res) => {
   try {
-    db.connectToDB();
+    await db.connectToDB();
 
     // Check the user
     const token = await getToken({
@@ -43,6 +59,7 @@ export const POST = async (request, response) => {
       secret: process.env.JWT_SECRET,
       secureCookie: process.env.NODE_ENV === "production",
     });
+
     if (!token) {
       return NextResponse.json(
         { message: "User not found." },
@@ -55,49 +72,50 @@ export const POST = async (request, response) => {
       );
     }
 
-    const { name, parentCategory } = await request.json();
-    const alreadyExist = await SubCategory.findOne({ name });
-    // Already exist
+    const { coupon, startDate, endDate, discount } = await request.json();
+    const alreadyExist = await Coupon.findOne({ coupon });
     if (alreadyExist) {
       return NextResponse.json(
-        { message: "Sub-category already exist. Try a different name." },
-        { status: CONFLICT_STATUS }
+        { message: "This Coupon name already exist, try another name." },
+        {
+          status: 400,
+        }
       );
     }
+    await new Coupon({
+      coupon,
+      startDate,
+      endDate,
+      discount,
+    }).save();
 
-    const slug = createSlug(name);
-    await new SubCategory({ name, parent: parentCategory, slug }).save();
-    const subCategories = await SubCategory.find({})
-      .populate({ path: "parent", model: Category })
-      .sort({ updatedAt: -1 })
-      .lean();
-
-    db.disConnectDB();
+    await db.disConnectDB();
     return NextResponse.json(
       {
-        message: `Sub-category "${name}" created successfully.`,
-        subCategories,
+        message: "Coupon created successfully",
+        coupons: await Coupon.find({}),
       },
       {
-        status: CREATE_AND_RETURN_OK_STATUS,
+        status: 200,
       }
     );
   } catch (error) {
-    db.disConnectDB();
     return NextResponse.json(
       {
         message: error.message,
       },
       {
-        status: INTERNAL_SERVER_ERROR_STATUS,
+        status: 500,
       }
     );
+  } finally {
+    await db.disConnectDB();
   }
 };
 
-export const PUT = async (request) => {
+export const PUT = async (request, res) => {
   try {
-    db.connectToDB();
+    await db.connectToDB();
 
     // Check the user
     const token = await getToken({
@@ -105,6 +123,7 @@ export const PUT = async (request) => {
       secret: process.env.JWT_SECRET,
       secureCookie: process.env.NODE_ENV === "production",
     });
+
     if (!token) {
       return NextResponse.json(
         { message: "User not found." },
@@ -117,49 +136,52 @@ export const PUT = async (request) => {
       );
     }
 
-    const { id, name, parent } = await request.json();
-    const subCategory = await SubCategory.findById(id);
-    // Sub-category not found
-    if (!subCategory) {
+    const { coupon, startDate, endDate, discount, id } = await request.json();
+    const alreadyExist = await Coupon.findById(id);
+    if (!alreadyExist) {
       return NextResponse.json(
-        { message: "Sub-category not found." },
-        { status: NOT_FOUND }
+        { message: "Coupon not found" },
+        {
+          status: 400,
+        }
       );
     }
+    await Coupon.findByIdAndUpdate(id, {
+      coupon,
+      startDate,
+      endDate,
+      discount,
+    });
 
-    const slug = createSlug(name);
-    await SubCategory.findByIdAndUpdate(id, { name, parent, slug });
-    const updateSubCategories = await SubCategory.find({})
-      .populate({ path: "parent", model: Category })
-      .sort({ updatedAt: -1 })
-      .lean();
+    const updatedCoupons = await Coupon.find({}).sort({ updatedAt: -1 });
 
-    db.disConnectDB();
+    await db.disConnectDB();
     return NextResponse.json(
       {
-        message: `Sub-category updated successfully.`,
-        subCategories: updateSubCategories,
+        message: "Coupon updated successfully",
+        coupons: updatedCoupons,
       },
       {
-        status: CREATE_AND_RETURN_OK_STATUS,
+        status: 200,
       }
     );
   } catch (error) {
-    db.disConnectDB();
     return NextResponse.json(
       {
         message: error.message,
       },
       {
-        status: INTERNAL_SERVER_ERROR_STATUS,
+        status: 500,
       }
     );
+  } finally {
+    await db.disConnectDB();
   }
 };
 
 export const DELETE = async (request) => {
   const url = new URL(request.url);
-  const subCategoryId = url.searchParams.get("id");
+  const couponId = url.searchParams.get("id");
 
   try {
     db.connectToDB();
@@ -181,16 +203,13 @@ export const DELETE = async (request) => {
       );
     }
 
-    // Delete category
-    await SubCategory.findByIdAndRemove(subCategoryId);
-    const subCategories = await SubCategory.find({})
-      .populate({ path: "parent", model: Category })
-      .sort({ updatedAt: -1 })
-      .lean();
+    // Delete Coupon
+    await Coupon.findByIdAndRemove(couponId);
+    const coupons = await Coupon.find({}).sort({ updatedAt: -1 }).lean();
     db.disConnectDB();
 
     return NextResponse.json(
-      { message: `Sub-category deleted successfully.`, subCategories },
+      { message: `Coupon deleted successfully.`, coupons },
       {
         status: CREATE_AND_RETURN_OK_STATUS,
       }

@@ -47,20 +47,22 @@ function DashboardSubCategories() {
     setSubCategoryDetails(null);
   };
 
+  // Fetch Categories
   useEffect(() => {
-    getSubCategories()
+    getCategories()
       .then((response) => {
-        setSubCategories(response.data.subCategories);
+        setCategories(response.data.categories);
       })
       .catch((error) => {
         console.log({ error });
       });
   }, []);
 
+  // Fetch Sub-categories
   useEffect(() => {
-    getCategories()
+    getSubCategories()
       .then((response) => {
-        setCategories(response.data.categories);
+        setSubCategories(response.data.subCategories);
       })
       .catch((error) => {
         console.log({ error });

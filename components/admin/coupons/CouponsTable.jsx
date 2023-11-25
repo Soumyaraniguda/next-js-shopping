@@ -3,11 +3,11 @@ import Box from "@mui/material/Box";
 import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
-import { getSubCategoriesTableColumns } from "@/utils/table";
+import { getCouponsTableColumns } from "@/utils/table";
 import Pagination from "@/components/table/Pagination";
 import TableToolbar from "@/components/table/TableToolbar";
 import TableHeader from "@/components/table/TableHeader";
-import SubCategoriesTableBody from "./SubCategoriesTableBody";
+import CouponsTableBody from "./CouponsTableBody";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -41,20 +41,20 @@ function stableSort(array, comparator) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-function SubCategoriesTable({
-  subCategories,
-  onCreateSubCategory,
+function CouponsTable({
+  coupons,
+  onCreateCoupon,
   onSelectDetails,
-  onDeleteSubCategory,
+  onDeleteCoupon,
 }) {
-  const rows = subCategories;
+  const rows = coupons;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("calories");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const tableColumns = getSubCategoriesTableColumns();
+  const tableColumns = getCouponsTableColumns();
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -108,14 +108,14 @@ function SubCategoriesTable({
     <Box sx={{ width: "100%" }}>
       <TableToolbar
         numSelected={selected.length}
-        onCreateEntity={onCreateSubCategory}
+        onCreateEntity={onCreateCoupon}
       />
       <Paper sx={{ width: "100%", mb: 2 }}>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
             size="small"
-            aria-labelledby="tableTitle"
+            aria-labelledby="couponsTable"
           >
             <TableHeader
               numSelected={selected.length}
@@ -127,13 +127,13 @@ function SubCategoriesTable({
               tableColumns={tableColumns}
             />
 
-            <SubCategoriesTableBody
+            <CouponsTableBody
               visibleRows={visibleRows}
               emptyRows={emptyRows}
               selected={selected}
               onSelect={handleClick}
               onSelectDetails={onSelectDetails}
-              onDeleteSubCategory={onDeleteSubCategory}
+              onDeleteCoupon={onDeleteCoupon}
             />
           </Table>
         </TableContainer>
@@ -150,4 +150,4 @@ function SubCategoriesTable({
   );
 }
 
-export default SubCategoriesTable;
+export default CouponsTable;

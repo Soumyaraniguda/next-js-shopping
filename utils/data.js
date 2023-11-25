@@ -17,7 +17,9 @@
 export const createSlug = (data, replacement = "-") => {
   if (data) {
     const dataInLowerCase = data.toLowerCase();
-    return dataInLowerCase.replace(" ", replacement);
+    const slug = dataInLowerCase.split(" ").join(replacement);
+
+    return slug;
   }
   return null;
 };

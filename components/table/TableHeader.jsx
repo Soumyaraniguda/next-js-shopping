@@ -23,8 +23,6 @@ function TableHeader(props) {
     onRequestSort(event, property);
   };
 
-  console.log("tableColumns =", tableColumns);
-
   return (
     <TableHead style={{ background: "#e1dddd" }}>
       <TableRow style={{ height: 50 }}>
