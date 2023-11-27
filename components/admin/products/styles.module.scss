@@ -1,0 +1,8 @@
+@import "../base.admin";
+
+.error_message {
+  font-size: small;
+  width: 100%;
+  margin: 0.8em;
+  color: $error-color;
+}

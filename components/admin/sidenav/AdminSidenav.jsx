@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   MdArrowForwardIos,
   MdLogout,
-  MdNotifications,
   MdOutlineCategory,
   MdSpaceDashboard,
 } from "react-icons/md";
@@ -17,16 +16,15 @@ import { usePathname } from "next/navigation";
 import { FcSalesPerformance } from "react-icons/fc";
 import { IoListCircleSharp, IoSettingsOutline } from "react-icons/io5";
 import { IoMdNotificationsOutline } from "react-icons/io";
-import { HiOutlineLogout, HiUsers } from "react-icons/hi";
+import { HiUsers } from "react-icons/hi";
 import { BiCategory, BiMessageDetail } from "react-icons/bi";
 import { BsListTask } from "react-icons/bs";
 import { RiCoupon3Line, RiPlayListAddLine } from "react-icons/ri";
-import { GrLogout } from "react-icons/gr";
 
 function AdminSidenav() {
   const pathName = usePathname();
   const activeRoute = pathName.split("/admin/dashboard/")[1];
-  console.log(activeRoute);
+  // console.log(activeRoute);
   const dispatch = useDispatch();
   const { data: session } = useSession();
   const { adminSideNavExpand } = useSelector((state) => ({ ...state }));

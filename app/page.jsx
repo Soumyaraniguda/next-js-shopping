@@ -42,7 +42,7 @@ export default function Home() {
 
   useEffect(() => {
     axios.get("/api/product").then((response) => {
-      setProducts(response.data?.data);
+      setProducts(response.data?.products);
     });
   }, []);
 

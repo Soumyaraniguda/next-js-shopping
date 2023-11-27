@@ -1,5 +1,9 @@
 import Product from "@/models/Product";
 import db from "@/utils/database";
+import {
+  CREATE_AND_RETURN_OK_STATUS,
+  INTERNAL_SERVER_ERROR_STATUS,
+} from "@/utils/statusCodes";
 import { NextResponse } from "next/server";
 
 export const GET = async (request) => {
@@ -9,10 +13,10 @@ export const GET = async (request) => {
 
     return NextResponse.json(
       {
-        data: products,
+        products,
       },
       {
-        status: 200,
+        status: CREATE_AND_RETURN_OK_STATUS,
       }
     );
   } catch (error) {
@@ -21,7 +25,7 @@ export const GET = async (request) => {
         message: error.message,
       },
       {
-        status: 500,
+        status: INTERNAL_SERVER_ERROR_STATUS,
       }
     );
   } finally {

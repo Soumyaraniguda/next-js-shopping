@@ -25,6 +25,14 @@ export const getSubCategories = async () => {
   return await axios.get(`/api/sub-categories`);
 };
 
+export const getSubCategoriesByCategory = async (category) => {
+  return await axios.get(`/api/sub-categories/by-category`, {
+    params: {
+      category,
+    },
+  });
+};
+
 export const addSubCategory = async (name, parentCategory) => {
   return await axios.post(`/api/sub-categories`, { name, parentCategory });
 };

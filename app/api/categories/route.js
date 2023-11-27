@@ -157,7 +157,7 @@ export const PUT = async (request) => {
 export const DELETE = async (request) => {
   const url = new URL(request.url);
   const categoryId = url.searchParams.get("id");
-  console.log("categoryId =", categoryId);
+
   try {
     db.connectToDB();
     // Check the user
