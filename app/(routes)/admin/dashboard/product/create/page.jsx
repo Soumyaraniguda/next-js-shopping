@@ -1,6 +1,6 @@
 "use client";
 
-import ProductDetailsForm from "@/components/admin/products/details/ProductDetailsForm";
+import ProductForm from "@/components/admin/products/details/ProductForm";
 import { getCategories } from "@/uiApiRequests/categories.api";
 import { getProductsWithFilteredData } from "@/uiApiRequests/products.api";
 import { Typography } from "@mui/material";
@@ -35,10 +35,7 @@ function CreateProduct() {
   return (
     <div>
       <Typography variant="h5">Create Product</Typography>
-      <ProductDetailsForm
-        parentProducts={parentProducts}
-        categories={categories}
-      />
+      <ProductForm parentProducts={parentProducts} categories={categories} />
     </div>
   );
 }

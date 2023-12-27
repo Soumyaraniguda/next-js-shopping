@@ -6,3 +6,176 @@
   margin: 0.8em;
   color: $error-color;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.color_span {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  box-shadow: $shadow-1;
+}
+
+.image_span {
+  height: 150px;
+  width: 100px;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+// Product images
+
+.images {
+  &__main {
+    &_grid {
+      img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+      }
+      &_wrap {
+        position: relative;
+        cursor: pointer;
+        overflow: hidden;
+        &:hover {
+          .images__main_grid_actions {
+            display: flex;
+          }
+          .blur {
+            display: block;
+          }
+        }
+        .blur {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: rgba(0, 0, 0, 0.24);
+          display: none;
+        }
+      }
+      &_actions {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        display: none;
+        z-index: 99;
+        button {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          display: grid;
+          place-items: center;
+          cursor: pointer;
+          transition: transform 0.2s ease-in;
+          transition-delay: 0.2s;
+          &:hover {
+            transform: scale(1.2);
+            svg {
+              // transform: scale(1.3);
+              fill: $blue-color;
+            }
+          }
+          svg {
+            transition: transform 0.1s ease-in-out;
+          }
+        }
+      }
+    }
+    button {
+      margin-top: 1rem;
+    }
+  }
+}
+
+// Product colors
+.colors {
+  padding-top: 1rem;
+  border-top: 1px solid #ccc;
+  button {
+    background: $blue-color;
+    color: #fff;
+  }
+}
+.wheel {
+  overflow: hidden;
+}
+.square__color {
+  padding: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+  overflow: hidden;
+}
+.toggle {
+  position: relative;
+  height: 50px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  &__btn {
+    margin-top: 10px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    &:hover {
+      stroke: $blue-color;
+    }
+  }
+}
+
+// Product sizes
+.sizesContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 10px;
+  select,
+  input {
+    border: none;
+    outline: none;
+    border: 1px solid #ccc;
+    padding-left: 1rem;
+    width: 150px;
+    height: 40px;
+    border-radius: 5px;
+  }
+  svg {
+    width: 30px;
+    height: 30px;
+    fill: $blue-color;
+    cursor: pointer;
+    margin-top: 5px;
+    &:hover {
+      fill: $dark-blue-color;
+    }
+  }
+}
+.click_btn {
+  background: $blue-color;
+  width: 250px;
+  font-weight: 600;
+  color: #fff;
+  height: 50px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.svg {
+  width: 30px;
+  height: 30px;
+  fill: $blue-color;
+  cursor: pointer;
+  margin-top: 5px;
+  &:hover {
+    fill: $dark-blue-color;
+  }
+}

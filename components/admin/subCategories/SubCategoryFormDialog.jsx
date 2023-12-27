@@ -55,7 +55,8 @@ function SubCategoryFormDialog({
   });
 
   const handleSubmit = () => {
-    if (subCategoryDetails._id) {
+    console.log("category =", subCategoryDetails);
+    if (subCategoryDetails && subCategoryDetails._id) {
       updateSubCategory({
         id: subCategoryDetails._id,
         subCategoryName,

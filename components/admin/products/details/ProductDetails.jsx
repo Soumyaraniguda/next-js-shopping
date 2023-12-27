@@ -1,86 +1,73 @@
-"use client";
+import React, { useState } from "react";
+import styles from "./../styles.module.scss";
+import { sizesList } from "@/utils/sizes";
+import { BsFillPatchMinusFill, BsFillPatchPlusFill } from "react-icons/bs";
 
-import {
-  getCategories,
-  getSubCategoriesByCategory,
-} from "@/uiApiRequests/categories.api";
-import {
-  getProductDetails,
-  getProductsWithFilteredData,
-} from "@/uiApiRequests/products.api";
-import { getInitialProductDetails } from "@/utils/product";
-import React, { useEffect, useState } from "react";
+function ProductDetails({ details, product, setProduct }) {
+  const handleDetails = (i, e) => {
+    const updatedDetails = [...details];
+    const name = e.target.name;
+    const value = e.target.value;
+    updatedDetails[i][name] = value;
+    setProduct({ ...product, details: updatedDetails });
+  };
 
-function ProductDetailsForm() {
-  const intialDetails = getInitialProductDetails();
-  const [parentProducts, setParentProducts] = useState([]);
-  const [productDetails, setProductDetails] = useState(intialDetails);
-  const [subCategories, setSubCategories] = useState([]);
-  const [categories, setCategories] = useState([]);
-
-  // UseEffect to GET the Parent product details
-  useEffect(() => {
-    if (productDetails.parent) {
-      getProductDetails(productDetails.parent)
-        .then((response) => {
-          if (response.data) {
-            const parentProductDetails = response.data;
-            const { name, description, brand, category, subCategories } =
-              parentProductDetails;
-            setProductDetails((prev) => {
-              return {
-                ...prev,
-                name,
-                description,
-                brand,
-                category,
-                subCategories,
-              };
-            });
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else return;
-  }, [productDetails.parent]);
-
-  // Use Effect to all parent products
-  useEffect(() => {
-    getProductsWithFilteredData(["name", "subProducts"])
-      .then((response) => {
-        setParentProducts(response.data.products);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  // UseEffect to GET the Categories
-  useEffect(() => {
-    getCategories()
-      .then((response) => {
-        setCategories(response.data.categories);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
-
-  // UseEffect to GET the Sub-categories
-  useEffect(() => {
-    if (productDetails.category) {
-      getSubCategoriesByCategory(productDetails.category)
-        .then((response) => {
-          setSubCategories(response.data.subCategories);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+  const handleRemove = (i) => {
+    if (details.length > 0) {
+      const updatedDetails = [...details];
+      updatedDetails.splice(i, 1);
+      setProduct({ ...product, details: updatedDetails });
     }
-  }, [productDetails.category]);
+  };
 
-  return <div>ProductDetailsForm</div>;
+  const handleAddSize = () => {
+    setProduct({
+      ...product,
+      details: [...details, { name: "", value: "" }],
+    });
+  };
+
+  return (
+    <div>
+      <div className={styles.header}>Details</div>
+
+      {!details.length ? (
+        <BsFillPatchPlusFill className={styles.svg} onClick={handleAddSize} />
+      ) : (
+        <></>
+      )}
+
+      {details ? (
+        details.map((detail, i) => {
+          return (
+            <div className={styles.sizesContainer} key={i}>
+              <input
+                type="text"
+                name="name"
+                placeholder="Name"
+                value={detail.name}
+                onChange={(e) => handleDetails(i, e)}
+              />
+              <input
+                type="text"
+                name="value"
+                placeholder="Value"
+                value={detail.value}
+                onChange={(e) => handleDetails(i, e)}
+              />
+
+              <>
+                <BsFillPatchMinusFill onClick={() => handleRemove(i)} />
+                <BsFillPatchPlusFill onClick={handleAddSize} />
+              </>
+            </div>
+          );
+        })
+      ) : (
+        <></>
+      )}
+    </div>
+  );
 }
 
-export default ProductDetailsForm;
+export default ProductDetails;

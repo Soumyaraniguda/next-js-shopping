@@ -5,13 +5,13 @@ import SingularSelect from "@/components/inputs/select/SingularSelect";
 import { getSubCategoriesByCategory } from "@/uiApiRequests/categories.api";
 import React, { useEffect, useState } from "react";
 
-function ProductCategory({ productDetails, onChange, categories }) {
+function ProductCategory({ product, onChange, categories }) {
   const [subCategories, setSubCategories] = useState([]);
 
   // UseEffect to GET the Sub-categories
   useEffect(() => {
-    if (productDetails.category) {
-      getSubCategoriesByCategory(productDetails.category)
+    if (product.category) {
+      getSubCategoriesByCategory(product.category)
         .then((response) => {
           setSubCategories(response.data.subCategories);
         })
@@ -19,28 +19,28 @@ function ProductCategory({ productDetails, onChange, categories }) {
           console.log(error);
         });
     }
-  }, [productDetails.category]);
+  }, [product.category]);
 
-  console.log("productDetails =", productDetails);
+  console.log("product =", product);
 
   return (
     <div>
       <SingularSelect
         name="category"
-        value={productDetails.category}
+        value={product.category}
         placeholder="Category"
         data={categories}
         header="Select a Category"
         handleChange={onChange}
-        disabled={productDetails.parent ? true : false}
+        disabled={product.parent ? true : false}
       />
-      {productDetails.category ? (
+      {product.category ? (
         <MultipleSelectChip
-          value={productDetails.subCategories}
+          value={product.subCategories}
           data={subCategories}
           header="Select Sub-categories"
           name="subCategories"
-          disabled={productDetails.parent ? true : false}
+          disabled={product.parent ? true : false}
           handleChange={onChange}
         />
       ) : (
